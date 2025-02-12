@@ -71,6 +71,7 @@
     "@prisma/client": "^6.3.0",
     "@stylistic/eslint-plugin-js": "^2.13.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/sanitize-html": "^2.13.0",
     "@typescript-eslint/parser": "^8.21.0",
     "dayjs-nuxt": "2.1.11",
     "eslint": "8.57.0",

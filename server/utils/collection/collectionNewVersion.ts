@@ -126,6 +126,7 @@ export default async function (collectionId: number) {
         name: "Draft",
         changelog: "xxx",
         collectionId,
+        creators: latestVersion.creators || "[]",
       },
     });
 
