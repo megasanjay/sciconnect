@@ -7,13 +7,13 @@ import RESOURCE_TYPE_JSON from "@/assets/json/resource-type.json";
 import PREFIX_JSON from "@/assets/json/prefix.json";
 
 definePageMeta({
-  name: "resource:edit",
+  name: "resource:new",
   layout: "app-layout",
   middleware: ["auth"],
 });
 
 useSeoMeta({
-  title: "Edit resource",
+  title: "Add a new resource",
 });
 
 const toast = useToast();
@@ -24,7 +24,6 @@ const identifierTypeOptions = PREFIX_JSON;
 
 const { collectionid, workspaceid } = route.params as {
   collectionid: string;
-
   workspaceid: string;
 };
 
@@ -216,7 +215,5 @@ const disableEditing = computed(() => {
         </UFormField>
       </UForm>
     </div>
-
-    <ModalNewCollection />
   </main>
 </template>
