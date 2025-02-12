@@ -34,8 +34,10 @@ workspaceStore.setWorkspaces(workspaces.value || []);
 </script>
 
 <template>
-  <main class="h-full bg-zinc-50 px-4">
-    <div class="flex h-36 items-center border-b border-gray-200 bg-white">
+  <main class="h-full bg-zinc-50 dark:bg-zinc-900">
+    <div
+      class="flex h-36 items-center border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-zinc-800"
+    >
       <div
         class="mx-auto flex w-full max-w-screen-xl items-center justify-between px-2.5 lg:px-20"
       >
@@ -66,7 +68,7 @@ workspaceStore.setWorkspaces(workspaces.value || []);
           v-for="workspace in workspaces"
           :key="workspace.id"
           :to="`/dashboard/workspaces/${workspace.id}`"
-          class="flex w-full flex-col space-y-4 rounded-md border border-slate-200 bg-white px-6 py-5 shadow-sm transition-all hover:shadow-md"
+          class="flex w-full flex-col space-y-4 rounded-md border border-slate-200 bg-white px-6 py-5 shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-zinc-800"
         >
           <div class="flex w-full items-start justify-start space-x-2">
             <UAvatar
@@ -89,7 +91,7 @@ workspaceStore.setWorkspaces(workspaces.value || []);
                 </UBadge>
               </div>
 
-              <span class="text-sm text-slate-500">
+              <span class="text-sm">
                 Created on
                 {{ $dayjs(workspace.created).format("MMMM DD, YYYY") }}
               </span>
