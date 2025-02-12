@@ -6,6 +6,10 @@ definePageMeta({
   middleware: ["auth"],
 });
 
+useSeoMeta({
+  title: "Dashboard",
+});
+
 const toast = useToast();
 
 const workspaceStore = useWorkspaceStore();
@@ -35,42 +39,43 @@ workspaceStore.setWorkspaces(workspaces.value || []);
       <div
         class="mx-auto flex w-full max-w-screen-xl items-center justify-between px-2.5 lg:px-20"
       >
-        <h1>Dashboard</h1>
+        <h1 class="text-4xl font-black">Dashboard</h1>
       </div>
     </div>
 
     <div class="mx-auto w-full max-w-screen-xl px-2.5 lg:px-20">
-      <div class="flex items-center justify-between space-x-4 py-10">
+      <div class="flex items-center justify-between gap-4 py-10">
         <UInput
           placeholder="Search..."
           icon="iconamoon:search-duotone"
           size="lg"
+          type="search"
         />
 
-        <UButton color="primary" @click="workspaceStore.showNewWorkspaceModal">
-          <template #icon>
-            <Icon name="mdi:plus" />
-          </template>
-          Create a new workspace
+        <UButton
+          color="primary"
+          icon="mdi:plus"
+          @click="workspaceStore.showNewWorkspaceModal"
+        >
+          <span class="w-max"> Create a new workspace </span>
         </UButton>
       </div>
 
       <div class="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
-        <NuxtLink
+        <ULink
           v-for="workspace in workspaces"
           :key="workspace.id"
           :to="`/dashboard/workspaces/${workspace.id}`"
-          class="flex w-full flex-col space-y-4 rounded-md border bg-white px-6 py-5 shadow-sm transition-all hover:shadow-md"
+          class="flex w-full flex-col space-y-4 rounded-md border border-slate-200 bg-white px-6 py-5 shadow-sm transition-all hover:shadow-md"
         >
           <div class="flex w-full items-start justify-start space-x-2">
             <UAvatar
-              size="lg"
+              size="xl"
               :src="`https://api.dicebear.com/7.x/shapes/svg?seed=${workspace.id}`"
-              class="h-[40px] w-[40px] hover:cursor-pointer hover:opacity-80"
             />
 
-            <div class="flex grow flex-col space-y-0">
-              <ContainerFlex justify="space-between" align="start">
+            <div class="flex flex-col">
+              <div class="flex items-center justify-between gap-2">
                 <span class="text-lg font-medium">
                   {{ workspace.title }}
                 </span>
@@ -82,7 +87,7 @@ workspaceStore.setWorkspaces(workspaces.value || []);
                 >
                   Personal
                 </UBadge>
-              </ContainerFlex>
+              </div>
 
               <span class="text-sm text-slate-500">
                 Created on
@@ -96,7 +101,7 @@ workspaceStore.setWorkspaces(workspaces.value || []);
               {{ workspace.description }}
             </span>
           </div>
-        </NuxtLink>
+        </ULink>
       </div>
     </div>
 

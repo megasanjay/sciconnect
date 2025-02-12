@@ -2,7 +2,7 @@
 @import "@nuxt/ui";
 
 :root {
-  --ui-radius: var(--radius-lg);
+  --ui-radius: var(--radius-sm);
   --ui-container: var(--container-7xl);
 }
 
