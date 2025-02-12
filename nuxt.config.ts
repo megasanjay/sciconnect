@@ -24,6 +24,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/ui",
     "nuxt-auth-utils",
+    "nuxt-headlessui",
     "dayjs-nuxt",
     "@pinia/nuxt",
     "@nuxt/image",

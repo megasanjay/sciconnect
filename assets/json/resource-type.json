@@ -1,0 +1,114 @@
+[
+  {
+    "label": "GitHub Repository",
+    "value": "gitHubRepository",
+    "icon": "mdi:github"
+  },
+  {
+    "label": "Git Repository",
+    "value": "gitRepository",
+    "icon": "mdi:git"
+  },
+  {
+    "label": "GitLab Repository",
+    "value": "gitLabRepository",
+    "icon": "ri:gitlab-fill"
+  },
+  {
+    "label": "Dataset",
+    "value": "dataset",
+    "icon": "material-symbols:dataset"
+  },
+  {
+    "label": "Journal Article",
+    "value": "journalArticle",
+    "icon": "ooui:journal-ltr"
+  },
+  {
+    "label": "Presentation",
+    "value": "presentation",
+    "icon": "tabler:presentation"
+  },
+  {
+    "label": "Poster",
+    "value": "poster",
+    "icon": "ep:data-board"
+  },
+  {
+    "label": "Genomic Data",
+    "value": "genomicData",
+    "icon": "solar:dna-bold"
+  },
+  {
+    "label": "Clinical Data",
+    "value": "clinicalData",
+    "icon": "material-symbols:clinical-notes"
+  },
+  {
+    "label": "Taxonomy",
+    "value": "taxonomy",
+    "icon": "icon-park-twotone:children-pyramid"
+  },
+  {
+    "label": "Amazon Product",
+    "value": "amazonProduct",
+    "icon": "ion:logo-amazon"
+  },
+  {
+    "label": "Antibody",
+    "value": "antibody",
+    "icon": "game-icons:antibody"
+  },
+  {
+    "label": "Adverse Outcome Pathways",
+    "value": "adverseOutcomePathways",
+    "icon": "material-symbols:view-timeline"
+  },
+  {
+    "label": "Peptide",
+    "value": "peptide",
+    "icon": "lets-icons:molecule-light"
+  },
+  {
+    "label": "Grant",
+    "value": "grant",
+    "icon": "solar:hand-money-bold"
+  },
+  {
+    "label": "preprint",
+    "value": "Preprint",
+    "icon": "ri:article-fill"
+  },
+  {
+    "label": "Software",
+    "value": "software",
+    "icon": "eos-icons:application"
+  },
+  {
+    "label": "Person",
+    "value": "person",
+    "icon": "carbon:user-avatar-filled"
+  },
+  {
+    "value": "conferencePresentation",
+    "label": "Conference Presentation",
+    "icon": "carbon:group-presentation"
+  },
+  {
+    "value": "webArticle",
+    "label": "Web Article",
+    "icon": "ri:article-line"
+  },
+  {
+    "value": "webPage",
+    "label": "Web Page",
+    "icon": "mdi:web"
+  },
+  { "label": "video", "value": "video", "icon": "mdi:video" },
+
+  {
+    "label": "Other",
+    "value": "other",
+    "icon": "mdi:resource-description-framework"
+  }
+]

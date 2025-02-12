@@ -24,6 +24,14 @@ export type Collection = {
     updated: Timestamp;
     workspaceId: string | null;
 };
+export type CollectionAccess = {
+    userId: string;
+    collectionId: number;
+    role: string;
+    hidden: Generated<boolean>;
+    created: Generated<Timestamp>;
+    updated: Timestamp;
+};
 export type ExternalRelation = {
     id: string;
     sourceId: string;
@@ -134,6 +142,7 @@ export type WorkspaceMember = {
 export type DB = {
     Analytics: Analytics;
     Collection: Collection;
+    CollectionAccess: CollectionAccess;
     ExternalRelation: ExternalRelation;
     InternalRelation: InternalRelation;
     Invite: Invite;

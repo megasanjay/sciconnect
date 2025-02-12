@@ -1,0 +1,206 @@
+[
+  {
+    "label": "Is Cited By",
+    "value": "IsCitedBy",
+    "mirror": "Cites",
+    "description": "indicates that B includes A in a citation"
+  },
+  {
+    "label": "Cites",
+    "value": "Cites",
+    "mirror": "IsCitedBy",
+    "description": "indicates that A includes B in a citation"
+  },
+  {
+    "label": "Is Supplement To",
+    "value": "IsSupplementTo",
+    "mirror": "IsSupplementedBy",
+    "description": "indicates that A is a supplement to B"
+  },
+  {
+    "label": "Is Supplemented By",
+    "value": "IsSupplementedBy",
+    "mirror": "IsSupplementTo",
+    "description": "indicates that B is a supplement to A"
+  },
+  {
+    "label": "Is Continued By",
+    "value": "IsContinuedBy",
+    "mirror": "Continues",
+    "description": "indicates A is continued by the work B"
+  },
+  {
+    "label": "Continues",
+    "value": "Continues",
+    "mirror": "IsContinuedBy",
+    "description": "indicates A is a continuation of the work B"
+  },
+  {
+    "label": "Describes",
+    "value": "Describes",
+    "mirror": "IsDescribedBy",
+    "description": "indicates A describes B"
+  },
+  {
+    "label": "Is Described By",
+    "value": "IsDescribedBy",
+    "mirror": "Describes",
+    "description": "indicates A is described by B"
+  },
+  {
+    "label": "Has Metadata",
+    "value": "HasMetadata",
+    "mirror": "IsMetadataFor",
+    "description": "indicates resource A has additional metadata B"
+  },
+  {
+    "label": "Is Metadata For",
+    "value": "IsMetadataFor",
+    "mirror": "HasMetadata",
+    "description": "indicates additional metadata A for a resource B"
+  },
+  {
+    "label": "Has Version",
+    "value": "HasVersion",
+    "mirror": "IsVersionOf",
+    "description": "indicates A has a version (B)"
+  },
+  {
+    "label": "Is Version Of",
+    "value": "IsVersionOf",
+    "mirror": "HasVersion",
+    "description": "indicates A is a version of B"
+  },
+  {
+    "label": "Is NewVersion Of",
+    "value": "IsNewVersionOf",
+    "mirror": "IsPreviousVersionOf",
+    "description": "indicates A is a new edition of B, where the new edition has been modified or updated"
+  },
+  {
+    "label": "Is Previous Version Of",
+    "value": "IsPreviousVersionOf",
+    "mirror": "IsNewVersionOf",
+    "description": "indicates A is a previous edition of B"
+  },
+  {
+    "label": "Is Part Of",
+    "value": "IsPartOf",
+    "mirror": "HasPart",
+    "description": "indicates A is a portion of B; may be used for elements of a series"
+  },
+  {
+    "label": "Has Part",
+    "value": "HasPart",
+    "mirror": "IsPartOf",
+    "description": "indicates A includes the part B"
+  },
+  {
+    "label": "Is Published In",
+    "value": "IsPublishedIn",
+    "mirror": "",
+    "description": "indicates A is published inside B, but is independent of other things published inside of B"
+  },
+  {
+    "label": "Is Referenced By",
+    "value": "IsReferencedBy",
+    "mirror": "References",
+    "description": "indicates A is used as a source of information by B"
+  },
+  {
+    "label": "References",
+    "value": "References",
+    "mirror": "IsReferencedBy",
+    "description": "indicates B is used as a source of information for A"
+  },
+  {
+    "label": "Is Documented By",
+    "value": "IsDocumentedBy",
+    "mirror": "Documents",
+    "description": "indicates B is documentation about/ explaining A; e.g. points to software documentation"
+  },
+  {
+    "label": "Documents",
+    "value": "Documents",
+    "mirror": "IsDocumentedBy",
+    "description": "indicates A is documentation about B; e.g. points to software documentation"
+  },
+  {
+    "label": "Is Compiled By",
+    "value": "IsCompiledBy",
+    "mirror": "Compiles",
+    "description": "indicates B is used to compile or create A"
+  },
+  {
+    "label": "Compiles",
+    "value": "Compiles",
+    "mirror": "IsCompiledBy",
+    "description": "indicates B is the result of a compile or creation event using  A"
+  },
+  {
+    "label": "Is Variant Form Of",
+    "value": "IsVariantFormOf",
+    "mirror": "IsOriginalFormOf",
+    "description": "indicates A is a variant or different form of B"
+  },
+  {
+    "label": "Is Original Form Of",
+    "value": "IsOriginalFormOf",
+    "mirror": "IsVariantFormOf",
+    "description": "indicates A is the original form of B"
+  },
+  {
+    "label": "Is Identical To",
+    "value": "IsIdenticalTo",
+    "mirror": "IsIdenticalTo",
+    "description": "indicates that A is identical to B, for use when there is a need to register two separate instances of the same resource"
+  },
+  {
+    "label": "Is Reviewed By",
+    "value": "IsReviewedBy",
+    "mirror": "Reviews",
+    "description": "indicates that A is reviewed by B"
+  },
+  {
+    "label": "Reviews",
+    "value": "Reviews",
+    "mirror": "IsReviewedBy",
+    "description": "indicates that A is a review of B"
+  },
+  {
+    "label": "Is Derived From",
+    "value": "IsDerivedFrom",
+    "mirror": "IsSourceOf",
+    "description": "indicates B is a source upon which A is based"
+  },
+  {
+    "label": "Is Source Of",
+    "value": "IsSourceOf",
+    "mirror": "IsDerivedFrom",
+    "description": "indicates A is a source upon which B is based"
+  },
+  {
+    "label": "Is Required By",
+    "value": "IsRequiredBy",
+    "mirror": "Requires",
+    "description": "Indicates A is required by B"
+  },
+  {
+    "label": "Requires",
+    "value": "Requires",
+    "mirror": "IsRequiredBy",
+    "description": "Indicates A requires B"
+  },
+  {
+    "label": "Obsoletes",
+    "value": "Obsoletes",
+    "mirror": "IsObsoletedBy",
+    "description": "Indicates A replaces B"
+  },
+  {
+    "label": "Is Obsoleted By",
+    "value": "IsObsoletedBy",
+    "mirror": "Obsoletes",
+    "description": "Indicates A is replaced by B"
+  }
+]

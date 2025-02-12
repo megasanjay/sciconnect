@@ -5,6 +5,7 @@ import type { FormSubmitEvent } from "#ui/types";
 import { useWorkspaceStore } from "@/stores/workspace";
 
 const toast = useToast();
+
 const workspaceStore = useWorkspaceStore();
 
 const createForm = useTemplateRef("createForm");
@@ -39,19 +40,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     .then((res) => {
       loading.value = false;
 
-      if (res.statusCode === 201) {
-        workspaceStore.hideNewWorkspaceModal();
+      workspaceStore.hideNewWorkspaceModal();
 
-        toast.add({
-          title: "Workspace created",
-          description: "You can now access your workspace",
-          icon: "material-symbols:check-circle-outline",
-        });
+      toast.add({
+        title: "Workspace created",
+        description: "You can now access your workspace",
+        icon: "material-symbols:check-circle-outline",
+      });
 
-        navigateTo(`/dashboard/workspaces/${res.workspace.id}`);
-      } else {
-        console.error(res);
-      }
+      navigateTo(`/dashboard/workspaces/${res.workspace.id}`);
     })
     .catch((err) => {
       loading.value = false;

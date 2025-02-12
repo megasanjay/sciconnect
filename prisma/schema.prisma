@@ -36,9 +36,10 @@ model User {
     created DateTime @default(now())
     updated DateTime @updatedAt
 
-    Notification    Notification[]
-    WorkspaceMember WorkspaceMember[]
-    Starred         Starred[]
+    Notification     Notification[]
+    WorkspaceMember  WorkspaceMember[]
+    Starred          Starred[]
+    CollectionAccess CollectionAccess[]
 
     @@index([emailAddress])
 }
@@ -104,6 +105,22 @@ model Invite {
     @@id([emailAddress, workspaceId])
 }
 
+model CollectionAccess {
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    collectionId Int
+    Collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+    role   String // admin | editor 
+    hidden Boolean @default(false) // used to hide the collection from the user's dashboard
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    @@id([userId, collectionId])
+}
+
 model Collection {
     id Int @id @default(autoincrement())
 
@@ -124,8 +141,9 @@ model Collection {
     workspaceId String?
     Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
 
-    Version Version[]
-    Starred Starred[]
+    Version          Version[]
+    Starred          Starred[]
+    CollectionAccess CollectionAccess[]
 }
 
 model Version {
