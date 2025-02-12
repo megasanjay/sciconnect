@@ -9,7 +9,7 @@ const collectionStore = useCollectionStore();
 const resourceStore = useResourceStore();
 
 const selectedWorkspace = ref("");
-const selectedCollection = ref("");
+const selectedCollection = ref(0);
 const selectedResource = ref("");
 
 const personalWorkspace = computed(() => {
@@ -38,6 +38,8 @@ const allCollections = computed(() => {
 
 const currentCollection = computed(() => {
   const allCollections = collectionStore.collections;
+
+  console.log(allCollections, "ac");
 
   return allCollections.find(
     (collection: Collection) => collection.id === selectedCollection.value,
@@ -89,7 +91,7 @@ const fetchAllWorkspaces = async (workspaceid: string) => {
 
 const fetchAllCollections = async (
   workspaceid: string,
-  collectionid: string = "",
+  collectionid: number = 0,
 ) => {
   if (collectionid === currentCollection.value?.id) return;
 
@@ -128,7 +130,7 @@ const fetchAllCollections = async (
 
 const fetchAllResources = async (
   workspaceid: string,
-  collectionid: string,
+  collectionid: number,
   resourceid: string = "",
 ) => {
   if (resourceid === currentResource.value?.id) return;
@@ -176,15 +178,18 @@ watchEffect(() => {
   }
 
   if (collectionid) {
-    selectedCollection.value = collectionid as string;
-    fetchAllCollections(workspaceid as string, collectionid as string);
+    selectedCollection.value = parseInt(collectionid as string);
+    fetchAllCollections(
+      workspaceid as string,
+      parseInt(collectionid as string),
+    );
   }
 
   if (resourceid) {
     selectedResource.value = resourceid as string;
     fetchAllResources(
       workspaceid as string,
-      collectionid as string,
+      parseInt(collectionid as string),
       resourceid as string,
     );
   }
@@ -200,7 +205,7 @@ const createNewWorkspace = () => {
   workspaceStore.showNewWorkspaceModal();
 };
 
-const navigateToCollection = (collectionid: string) => {
+const navigateToCollection = (collectionid: number) => {
   navigateTo(
     `/dashboard/workspaces/${selectedWorkspace.value}/collections/${collectionid}`,
   );
@@ -241,8 +246,13 @@ const navigateToResource = (resourceid: string) => {
 
                 <div
                   v-else
-                  class="flex w-max items-center justify-start space-x-2 rounded-md p-1 transition-all hover:bg-gray-50"
+                  class="flex items-center justify-start space-x-2 rounded-md p-1 transition-all hover:bg-gray-50"
                 >
+                  <UAvatar
+                    :src="`https://api.dicebear.com/6.x/shapes/svg?seed=${currentWorkspace?.id}`"
+                    size="sm"
+                  />
+
                   <span
                     class="text-base font-medium transition-all hover:text-gray-600"
                   >
@@ -425,7 +435,7 @@ const navigateToResource = (resourceid: string) => {
                     class="flex items-center justify-start space-x-2 rounded-md p-1 transition-all hover:bg-gray-50"
                   >
                     <UAvatar
-                      :src="`${currentCollection?.image_url}?t=${currentCollection?.updated}`"
+                      :src="`${currentCollection?.imageUrl}?t=${currentCollection?.updated}`"
                       size="sm"
                     />
 
@@ -476,7 +486,7 @@ const navigateToResource = (resourceid: string) => {
                   >
                     <div class="flex items-center justify-start space-x-2 pr-4">
                       <UAvatar
-                        :src="`${collection?.image_url}?t=${collection?.updated}`"
+                        :src="`${collection?.imageUrl}?t=${collection?.updated}`"
                         size="xl"
                       />
 

@@ -28,3 +28,44 @@
   --color-primary-900: var(--ui-color-primary-900);
   --color-primary-950: var(--ui-color-primary-950);
 }
+
+/* #region  Page Transitions  */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
+
+/* #endregion  Page Transitions  */
+
+/* #region  Layout Transitions  */
+.layout-enter-active,
+.layout-leave-active {
+  transition: all 0.4s;
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  opacity: 0;
+}
+
+/* #endregion  Layout Transitions  */
+
+/* #region  Component Transitions  */
+.fade-enter-active,
+.fade-leave-active {
+  opacity: 0;
+  filter: blur(1rem);
+  transition: all 0.25s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* #endregion  Component Transitions  */
