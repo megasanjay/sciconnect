@@ -1,0 +1,265 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["strictUndefinedChecks"]
+}
+
+generator kysely {
+    provider = "prisma-kysely"
+
+    output   = "../types"
+    fileName = "kysely.ts"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id String @id @default(cuid())
+
+    givenName  String @default("")
+    familyName String @default("")
+
+    affiliation         String @default("")
+    contactEmailAddress String @default("")
+    website             String @default("")
+
+    emailAddress String @unique
+    password     String
+
+    emailVerified                 Boolean   @default(false)
+    emailVerifiedAt               DateTime?
+    emailVerificationToken        String?   @unique
+    emailVerificationTokenExpires DateTime?
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    Notification    Notification[]
+    WorkspaceMember WorkspaceMember[]
+    Starred         Starred[]
+
+    @@index([emailAddress])
+}
+
+model Notification {
+    id String @id @default(cuid())
+
+    title String  @default("")
+    body  String  @default("")
+    type  String  @default("info")
+    url   String  @default("https://sciconnect.io")
+    read  Boolean @default(false)
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+}
+
+model Workspace {
+    id String @id @default(cuid())
+
+    title       String @default("")
+    description String @default("")
+
+    personal Boolean @default(false)
+
+    type String @default("organization") // organization | personal
+
+    created         DateTime          @default(now())
+    updated         DateTime          @updatedAt
+    WorkspaceMember WorkspaceMember[]
+    Invite          Invite[]
+    Collection      Collection[]
+}
+
+model WorkspaceMember {
+    workspaceId String
+    workspace   Workspace @relation(fields: [workspaceId], references: [id])
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    owner Boolean @default(false)
+    admin Boolean @default(false)
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    @@id([userId, workspaceId])
+}
+
+model Invite {
+    emailAddress String
+
+    workspaceId String
+    workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade) // allows for custom workspace naming
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    @@id([emailAddress, workspaceId])
+}
+
+model Collection {
+    id Int @id @default(autoincrement())
+
+    title               String @default("")
+    description         String @default("")
+    detailedDescription String @default("")
+
+    type String @default("other") // project | person | ... | other
+
+    imageUrl String  @default("https://api.dicebear.com/6.x/shapes/svg")
+    private  Boolean @default(false) // used to hide the collection from public view
+
+    randomInt Int @default(0) // used to maintain order of collections              
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    workspaceId String?
+    Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
+
+    Version Version[]
+    Starred Starred[]
+}
+
+model Version {
+    id Int @id @default(autoincrement())
+
+    collectionId Int
+    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade) // Remove the cascading delete
+
+    name      String @default("") // 23.5.30.1 (using calver for this)
+    changelog String @default("")
+
+    creators Json @default("[]") // [{"creatorName": "Smith, John", "familyName": "Smith", "givenName": "John", "nameType": "personal", "affliation": "University of California, Berkeley", "identifier": "https://orcid.org/0000-0002-1825-0097", "identifierType String // doi, url, ror, orcid, etc (prefix from identifiers.org)": "orcid"}] 
+
+    published   Boolean   @default(false)
+    publishedOn DateTime?
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    Resource         Resource[]
+    InternalRelation InternalRelation[]
+    ExternalRelation ExternalRelation[]
+}
+
+model Resource {
+    id String @id @default(cuid())
+
+    identifierType String // doi, url, ror, orcid, etc (prefix from identifiers.org)
+    identifier     String // the actual identifier (10.1234/abc)
+
+    title       String @default("")
+    description String @default("")
+
+    resourceType String  @default("other") //githubRepository, conferencePresentation, etc..
+    versionLabel String?
+
+    backLink   Resource? @relation("NewVersionRelation", fields: [backLinkId], references: [id]) // Used for new verision
+    backLinkId String?
+
+    originalResourceId String?
+    originalResource   Resource? @relation("OriginalResourceRelation", fields: [originalResourceId], references: [id])
+
+    action String? // oldVersion | delete | clone
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    versionId Int?
+    version   Version? @relation(fields: [versionId], references: [id])
+
+    Resource         Resource[] @relation("NewVersionRelation")
+    OriginalResource Resource[] @relation("OriginalResourceRelation")
+
+    InternalRelationSource InternalRelation[] @relation("SourceRelation")
+    InternalRelationTarget InternalRelation[] @relation("TargetRelation")
+
+    ExternalRelationSource ExternalRelation[]
+}
+
+model InternalRelation {
+    id String @id @default(cuid())
+
+    originalRelation   InternalRelation? @relation("OriginalInternalRelation", fields: [originalRelationId], references: [id])
+    originalRelationId String?
+
+    sourceId String
+    source   Resource @relation("SourceRelation", fields: [sourceId], references: [id], onDelete: Cascade)
+
+    targetId String
+    target   Resource @relation("TargetRelation", fields: [targetId], references: [id], onDelete: Cascade)
+
+    type         String // isCitedBy, etc 
+    resourceType String? // Book, Article, etc
+
+    action String? // delete
+
+    mirror Boolean @default(false)
+
+    versionId Int?
+    version   Version? @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    InternalRelation InternalRelation[] @relation("OriginalInternalRelation")
+}
+
+model ExternalRelation {
+    id String @id @default(cuid())
+
+    sourceId String
+    source   Resource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+    originalRelation   ExternalRelation? @relation("OriginalExternalRelation", fields: [originalRelationId], references: [id])
+    originalRelationId String?
+
+    target      String // the actual identifier (10.1234/abc)
+    target_type String // doi, url, ror, orcid, etc (prefix from identifiers.org)
+
+    type         String // isCitedBy, etc 
+    resourceType String? // Book, Article, etc
+
+    action String? // delete | clone | ...
+
+    versionId Int?
+    version   Version? @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+    created DateTime @default(now())
+    updated DateTime @updatedAt
+
+    ExternalRelation ExternalRelation[] @relation("OriginalExternalRelation")
+}
+
+model Analytics {
+    id Int @id @default(autoincrement())
+
+    identifier String
+    type       String // collection, version, link, etc
+
+    event String @default("") // view, click, etc
+
+    created DateTime @default(now())
+
+    @@index([identifier])
+}
+
+model Starred {
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+
+    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+    collectionId Int
+
+    created DateTime @default(now())
+
+    @@id([userId, collectionId])
+}
