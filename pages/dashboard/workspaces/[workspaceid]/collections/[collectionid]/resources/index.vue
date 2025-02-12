@@ -120,120 +120,113 @@ const selectIcon = (type: string) => {
             'border-red-600 bg-white': resource.filledIn === false,
           }"
         >
-          <div class="flex w-full items-center justify-start pb-2">
-            <div>
-              <Icon :name="selectIcon(resource.resourceType)" size="35" />
-            </div>
+          <div class="flex w-full items-center justify-start gap-2 pb-2">
+            <UIcon :name="selectIcon(resource.resourceType)" class="size-6" />
 
-            <n-divider vertical />
+            <USeparator orientation="vertical" class="h-5" />
 
-            <div class="flex w-full flex-col space-y-1">
+            <div class="flex w-full flex-col gap-1">
               <div class="flex items-center justify-between gap-2">
                 <span class="text-lg leading-5 font-medium">
                   {{ resource.title || "No title provided" }}
                 </span>
 
                 <div class="flex items-center justify-end space-x-2">
-                  <n-tag
+                  <UBadge
                     v-if="resource.filledIn === false"
-                    type="error"
-                    size="medium"
+                    color="error"
+                    size="md"
+                    variant="outline"
+                    icon="mdi:alert"
                   >
-                    <Icon name="mdi:alert" size="16" />
                     Needs to be filled in
-                  </n-tag>
+                  </UBadge>
 
-                  <n-tooltip
-                    v-if="
-                      resource.action === 'create' ||
-                      resource.action === 'update' ||
-                      resource.action === 'delete' ||
-                      resource.action === 'oldVersion'
+                  <UTooltip
+                    :disabled="
+                      !(
+                        resource.action === 'create' ||
+                        resource.action === 'update' ||
+                        resource.action === 'delete' ||
+                        resource.action === 'oldVersion'
+                      )
                     "
-                    trigger="hover"
-                    placement="bottom-end"
                   >
-                    <template #trigger>
-                      <div class="flex gap-2">
-                        <n-tag
-                          v-if="resource.action === 'create'"
-                          type="info"
-                          size="medium"
-                        >
-                          <template #icon>
-                            <Icon name="mdi:new-box" size="16" />
-                          </template>
-                          New Resource
-                        </n-tag>
+                    <div class="flex gap-2">
+                      <UBadge
+                        v-if="resource.action === 'create'"
+                        type="info"
+                        size="md"
+                        variant="outline"
+                        icon="mdi:new-box"
+                      >
+                        New Resource
+                      </UBadge>
 
-                        <n-tag
-                          v-if="
-                            resource.action === 'delete' ||
-                            resource.action === 'oldVersion'
-                          "
-                          type="error"
-                          size="medium"
-                        >
-                          <template #icon>
-                            <Icon name="jam:delete" size="16" />
-                          </template>
-                          Marked for deletion
-                        </n-tag>
+                      <UBadge
+                        v-if="
+                          resource.action === 'delete' ||
+                          resource.action === 'oldVersion'
+                        "
+                        type="error"
+                        size="md"
+                        variant="outline"
+                        icon="jam:delete"
+                      >
+                        Marked for deletion
+                      </UBadge>
 
-                        <n-tag
-                          v-if="resource.action === 'update'"
-                          type="success"
-                          size="medium"
-                        >
-                          <template #icon>
-                            <Icon name="uil:edit-alt" size="16" />
-                          </template>
+                      <UBadge
+                        v-if="resource.action === 'update'"
+                        type="success"
+                        size="md"
+                        variant="outline"
+                        icon="clarity:new-solid"
+                      >
+                        Updated
+                      </UBadge>
+                    </div>
 
-                          Updated
-                        </n-tag>
-                      </div>
+                    <template #content>
+                      <span>
+                        Last modified on {{ displayLongDate(resource.updated) }}
+                      </span>
                     </template>
-                    Last modified on {{ displayLongDate(resource.updated) }}
-                  </n-tooltip>
+                  </UTooltip>
 
-                  <n-tag
+                  <UBadge
                     v-if="resource.action === 'oldVersion'"
-                    type="warning"
-                    size="medium"
+                    color="warning"
+                    size="md"
+                    variant="outline"
+                    icon="ic:round-history"
                   >
-                    <template #icon>
-                      <Icon name="ic:round-history" size="16" />
-                    </template>
                     Newer Version Available
-                  </n-tag>
+                  </UBadge>
 
-                  <n-tag
+                  <UBadge
                     v-if="resource.action === 'newVersion'"
-                    type="info"
-                    size="medium"
+                    color="info"
+                    size="md"
+                    variant="outline"
+                    icon="clarity:new-solid"
                   >
-                    <template #icon>
-                      <Icon name="clarity:new-solid" size="16" />
-                    </template>
-
                     New Version
-                  </n-tag>
+                  </UBadge>
 
-                  <n-divider
+                  <USeparator
                     v-if="resource.action && resource.action !== 'oldVersion'"
-                    vertical
+                    orientation="vertical"
                   />
 
-                  <n-button
+                  <UButton
                     v-if="resource.action === 'delete'"
-                    type="error"
-                    size="small"
+                    size="sm"
+                    color="error"
+                    icon="mdi:undo"
                   >
-                    <template #icon>
-                      <Icon name="mdi:undo" />
-                    </template>
                     Undo delete
-                  </n-button>
+                  </UButton>
 
                   <NuxtLink
                     v-if="
@@ -243,37 +236,36 @@ const selectIcon = (type: string) => {
                     "
                     :to="`/dashboard/workspaces/${workspaceid}/collections/${collection?.id}/resources/${resource.id}/edit`"
                   >
-                    <n-button type="info" size="small">
-                      <template #icon>
-                        <Icon name="akar-icons:edit" />
-                      </template>
+                    <UButton size="sm" icon="akar-icons:edit" color="primary">
                       Edit
-                    </n-button>
+                    </UButton>
                   </NuxtLink>
                 </div>
               </div>
             </div>
           </div>
 
-          <p class="border-t border-dashed py-3">
+          <p class="border-t border-dashed border-slate-300 py-3">
             {{ resource.description || "No description provided" }}
           </p>
 
-          <div class="flex w-full items-center space-x-1 border-t pt-3 pb-4">
-            <n-tag
-              :type="resource.identifierType ? 'info' : 'error'"
-              size="small"
-              class=""
+          <div
+            class="flex w-full items-center space-x-1 border-t border-slate-400 pt-3 pb-4"
+          >
+            <UBadge
+              :color="resource.identifierType ? 'info' : 'error'"
+              size="sm"
+              variant="outline"
             >
               {{ resource.identifierType || "No identifier provided" }}
-            </n-tag>
+            </UBadge>
 
             <div>
-              <n-divider vertical />
+              <USeparator orientation="vertical" />
             </div>
 
             <div class="group w-max">
-              <NuxtLink
+              <ULink
                 :to="
                   resource.identifierType !== 'url'
                     ? `https://identifiers.org/${resource.identifierType}/${resource.identifier}`
@@ -291,7 +283,7 @@ const selectIcon = (type: string) => {
                   size="16"
                   class="ml-1 text-blue-600 transition-all group-hover:text-blue-700 group-hover:underline"
                 />
-              </NuxtLink>
+              </ULink>
             </div>
           </div>
         </NuxtLink>

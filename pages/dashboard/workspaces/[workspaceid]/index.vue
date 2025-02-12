@@ -96,7 +96,7 @@ if (error.value) {
         </ULink>
       </div>
 
-      <AppDivider
+      <USeparator
         v-if="
           workspace?.hiddenCollectionsCount &&
           workspace?.hiddenCollectionsCount > 0
@@ -110,7 +110,7 @@ if (error.value) {
           This workspace has {{ workspace?.hiddenCollectionsCount }} hidden
           collection{{ workspace?.hiddenCollectionsCount > 1 ? "s" : "" }}.
         </NuxtLink>
-      </AppDivider>
+      </USeparator>
     </div>
 
     <ModalNewCollection />

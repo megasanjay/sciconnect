@@ -86,7 +86,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
       // navigate to the new resource
       navigateTo(
-        `/dashboard/workspaces/${workspaceid}/collections/${collectionid}/resources/${response.resourceId}`,
+        `/dashboard/workspaces/${workspaceid}/collections/${collectionid}/resources`,
       );
     })
     .catch((error) => {

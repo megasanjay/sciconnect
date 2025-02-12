@@ -77,13 +77,13 @@ if (error.value) {
       </DataDisplay>
 
       <DataDisplay title="Collection Type">
-        <n-tag type="info">{{ collection?.type }}</n-tag>
+        <UBadge color="info">{{ collection?.type }}</UBadge>
       </DataDisplay>
 
       <DataDisplay title="Visibility">
-        <n-tag v-if="collection?.private" type="warning"> Private </n-tag>
+        <UBadge v-if="collection?.private" color="warning"> Private </UBadge>
 
-        <n-tag v-else type="success"> Public </n-tag>
+        <UBadge v-else color="success"> Public </UBadge>
       </DataDisplay>
 
       <DataDisplay
