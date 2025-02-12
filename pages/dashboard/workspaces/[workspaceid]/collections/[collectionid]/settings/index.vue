@@ -310,11 +310,13 @@ const updateThumbnail = async (evt: any) => {
         <n-spin :show="thumbnailLoading">
           <div class="relative">
             <label class="" for="single">
-              <n-avatar
-                :src="collectionImage"
-                :size="100"
+              <UAvatar
+                :src="
+                  collectionImage ||
+                  'https://api.dicebear.com/6.x/shapes/svg?seed=collection'
+                "
+                size="xl"
                 alt="Collection Thumbnail"
-                class="cursor-pointer bg-transparent transition-all hover:opacity-70"
               />
             </label>
 
@@ -346,27 +348,25 @@ const updateThumbnail = async (evt: any) => {
         be shown in the public catalog page.
       </p>
 
-      <n-input
-        v-model:value="collectionName"
+      <UInput
+        v-model="collectionName"
         placeholder="Collection Name"
         class="w-full"
-        size="large"
+        size="lg"
       />
 
       <template #action>
         <div class="flex items-center justify-end">
-          <n-button
-            type="primary"
-            color="black"
+          <UButton
+            color="primary"
+            icon="humbleicons:save"
+            size="lg"
             :loading="saveLoading"
             :disabled="collectionName.trim() === ''"
             @click="updateCollectionDetails"
           >
-            <template #icon>
-              <Icon name="ic:round-save" />
-            </template>
             Save
-          </n-button>
+          </UButton>
         </div>
       </template>
     </CardWithAction>
@@ -378,30 +378,26 @@ const updateThumbnail = async (evt: any) => {
         collection.
       </p>
 
-      <n-input
-        v-model:value="collectionDescription"
+      <UTextarea
+        v-model="collectionDescription"
         placeholder="Collection Description"
         class="w-full"
-        type="textarea"
-        size="large"
-        show-count
-        :maxlength="350"
+        size="lg"
+        :rows="4"
       />
 
       <template #action>
         <div class="flex items-center justify-end">
-          <n-button
-            type="primary"
-            color="black"
+          <UButton
+            color="primary"
+            icon="humbleicons:save"
+            size="lg"
             :loading="saveLoading"
             :disabled="collectionDescription.trim() === ''"
             @click="updateCollectionDetails"
           >
-            <template #icon>
-              <Icon name="ic:round-save" />
-            </template>
             Save
-          </n-button>
+          </UButton>
         </div>
       </template>
     </CardWithAction>
@@ -425,18 +421,16 @@ const updateThumbnail = async (evt: any) => {
 
       <template #action>
         <div class="flex items-center justify-end">
-          <n-button
-            type="primary"
-            color="black"
+          <UButton
+            color="primary"
+            icon="humbleicons:save"
+            size="lg"
             :loading="saveLoading"
             :disabled="collectionDetailedDescription.trim() === ''"
             @click="updateCollectionDetails"
           >
-            <template #icon>
-              <Icon name="ic:round-save" />
-            </template>
             Save
-          </n-button>
+          </UButton>
         </div>
       </template>
     </CardWithAction>
@@ -447,26 +441,25 @@ const updateThumbnail = async (evt: any) => {
         type will help users understand the purpose of your collection.
       </p>
 
-      <n-select
-        v-model:value="collectionType"
-        filterable
-        size="large"
-        :options="collectionTypeOptions"
+      <USelect
+        v-model="collectionType"
+        :items="collectionTypeOptions"
+        placeholder="Select a collection type"
+        class="w-full"
+        size="lg"
       />
 
       <template #action>
         <div class="flex items-center justify-end">
-          <n-button
-            type="primary"
-            color="black"
+          <UButton
+            color="primary"
+            icon="humbleicons:save"
+            size="lg"
             :loading="saveLoading"
             @click="updateCollectionDetails"
           >
-            <template #icon>
-              <Icon name="ic:round-save" />
-            </template>
             Save
-          </n-button>
+          </UButton>
         </div>
       </template>
     </CardWithAction>
@@ -476,20 +469,12 @@ const updateThumbnail = async (evt: any) => {
         This is your collection's unique ID within the platform.
       </p>
 
-      <n-input-group>
-        <n-input
-          v-model:value="collectionid"
-          size="large"
-          :style="{ width: '50%' }"
-          disabled
-        />
-
-        <n-button type="info" secondary size="large">
-          <template #icon>
-            <Icon name="ic:round-content-copy" />
-          </template>
-        </n-button>
-      </n-input-group>
+      <UInput
+        v-model="collectionid"
+        disabled
+        size="lg"
+        icon="mdi:content-copy"
+      />
 
       <template #action>
         <div class="flex h-full items-center justify-start">
@@ -505,20 +490,7 @@ const updateThumbnail = async (evt: any) => {
         This is your collection's version ID within the platform.
       </p>
 
-      <n-input-group>
-        <n-input
-          v-model:value="versionId"
-          size="large"
-          :style="{ width: '50%' }"
-          disabled
-        />
-
-        <n-button type="info" secondary size="large">
-          <template #icon>
-            <Icon name="ic:round-content-copy" />
-          </template>
-        </n-button>
-      </n-input-group>
+      <UInput v-model="versionId" disabled size="lg" icon="mdi:content-copy" />
 
       <template #action>
         <div class="flex h-full items-center justify-start">
@@ -538,70 +510,70 @@ const updateThumbnail = async (evt: any) => {
 
       <template #action>
         <div class="flex items-center justify-end">
-          <n-button type="warning" @click="openDiscardVersionModal">
-            <template #icon>
-              <Icon name="bx:reset" />
+          <UModal v-model="discardVersionModalIsOpen">
+            <UButton
+              color="warning"
+              icon="bx:reset"
+              @click="openDiscardVersionModal"
+            >
+              Reset collection
+            </UButton>
+
+            <template #content>
+              <UCard>
+                <div class="sm:flex sm:items-start">
+                  <div class="size-[50px]">
+                    <ClientOnly>
+                      <Vue3Lottie
+                        animation-link="https://cdn.lottiel.ink/assets/D_t3nuMGrtwzjOGX2UXXI.json"
+                        :height="50"
+                        :width="50"
+                        :loop="1"
+                      />
+                    </ClientOnly>
+                  </div>
+
+                  <div class="mt-2 text-center sm:ml-4 sm:text-left">
+                    <h3 class="text-base leading-6 font-semibold text-gray-900">
+                      Are you sure you want to reset this collection?
+                    </h3>
+
+                    <div class="mt-2">
+                      <p class="text-sm text-gray-500">
+                        This will discard any changes you have made. This action
+                        is not reversible, so please continue with caution.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <template #footer>
+                  <div class="flex items-center justify-end space-x-2">
+                    <UButton
+                      icon="material-symbols:cancel-outline"
+                      color="error"
+                      variant="soft"
+                      @click="discardVersionModalIsOpen = false"
+                    >
+                      Cancel
+                    </UButton>
+
+                    <UButton
+                      color="warning"
+                      icon="bx:reset"
+                      :loading="discardVersionLoading"
+                      @click="discardDraftVersion"
+                    >
+                      Reset collection
+                    </UButton>
+                  </div>
+                </template>
+              </UCard>
             </template>
-            Reset collection
-          </n-button>
+          </UModal>
         </div>
       </template>
     </CardWithAction>
-
-    <UModal
-      v-model="discardVersionModalIsOpen"
-      :prevent-close="discardVersionLoading"
-    >
-      <UCard>
-        <div class="sm:flex sm:items-start">
-          <div class="size-[50px]">
-            <ClientOnly>
-              <Vue3Lottie
-                animation-link="https://cdn.lottiel.ink/assets/D_t3nuMGrtwzjOGX2UXXI.json"
-                :height="50"
-                :width="50"
-                :loop="1"
-              />
-            </ClientOnly>
-          </div>
-
-          <div class="mt-2 text-center sm:ml-4 sm:text-left">
-            <h3 class="text-base leading-6 font-semibold text-gray-900">
-              Are you sure you want to reset this collection?
-            </h3>
-
-            <div class="mt-2">
-              <p class="text-sm text-gray-500">
-                This will discard any changes you have made. This action is not
-                reversible, so please continue with caution.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <template #footer>
-          <div class="flex items-center justify-end space-x-2">
-            <n-button secondary @click="discardVersionModalIsOpen = false">
-              <template #icon>
-                <Icon name="material-symbols:cancel-outline" />
-              </template>
-              Cancel
-            </n-button>
-
-            <n-button
-              type="warning"
-              :loading="discardVersionLoading"
-              @click="discardDraftVersion"
-            >
-              <template #icon>
-                <Icon name="bx:reset" />
-              </template>
-              Reset collection
-            </n-button>
-          </div>
-        </template>
-      </UCard>
-    </UModal>
 
     <CardWithAction title="Hide collection">
       <p class="my-3 text-sm">
@@ -611,12 +583,9 @@ const updateThumbnail = async (evt: any) => {
 
       <template #action>
         <div class="flex items-center justify-end">
-          <n-button type="error" secondary @click="hideCollection">
-            <template #icon>
-              <Icon name="mdi:hide" />
-            </template>
+          <UButton color="error" icon="mdi:hide" @click="hideCollection">
             Hide
-          </n-button>
+          </UButton>
         </div>
       </template>
     </CardWithAction>
@@ -630,12 +599,9 @@ const updateThumbnail = async (evt: any) => {
 
       <template #action>
         <div class="flex items-center justify-end">
-          <n-button type="error" @click="deleteCollection">
-            <template #icon>
-              <Icon name="ic:round-delete" />
-            </template>
+          <UButton color="error" icon="mdi:delete" @click="deleteCollection">
             Delete
-          </n-button>
+          </UButton>
         </div>
       </template>
     </CardWithAction>
