@@ -20,8 +20,8 @@ export default defineEventHandler(async (event) => {
 
   if (!collection) {
     throw createError({
-      message: "Collection not found",
       statusCode: 404,
+      statusMessage: "Collection not found",
     });
   }
 
@@ -140,8 +140,8 @@ export default defineEventHandler(async (event) => {
 
     if (!currentResource) {
       throw createError({
-        message: "Resource not found",
         statusCode: 404,
+        statusMessage: "Resource not found",
       });
     }
   }

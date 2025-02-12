@@ -44,7 +44,7 @@ const schema = z.object({
 type Schema = z.output<typeof schema>;
 
 const state = reactive({
-  title: faker.commerce.product(),
+  title: faker.commerce.productName(),
   description: faker.lorem.paragraph(),
   identifier: faker.internet.url(),
   identifierType: "url",
@@ -74,7 +74,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       method: "POST",
     },
   )
-    .then((response) => {
+    .then(() => {
       loading.value = false;
 
       toast.add({
@@ -84,7 +84,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         icon: "material-symbols:check-circle-outline",
       });
 
-      // navigate to the new resource
+      // navigate to resources page
       navigateTo(
         `/dashboard/workspaces/${workspaceid}/collections/${collectionid}/resources`,
       );

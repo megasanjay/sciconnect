@@ -21,8 +21,8 @@ export default defineEventHandler(async (event) => {
 
   if (!collectionAccess) {
     throw createError({
-      message: "No access to collection",
       statusCode: 403,
+      statusMessage: "No access to collection",
     });
   }
 
@@ -37,8 +37,8 @@ export default defineEventHandler(async (event) => {
 
   if (!workspaceMember) {
     throw createError({
-      message: "No access to workspace",
       statusCode: 403,
+      statusMessage: "No access to workspace",
     });
   }
 

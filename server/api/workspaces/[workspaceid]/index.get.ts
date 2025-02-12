@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
 
   if (!workspace) {
     throw createError({
-      message: "Workspace not found",
       statusCode: 404,
+      statusMessage: "Workspace not found",
     });
   }
 

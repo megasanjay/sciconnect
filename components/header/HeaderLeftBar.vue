@@ -573,7 +573,7 @@ const navigateToResource = (resourceid: string) => {
                   >
                     <UAvatar
                       :src="`https://api.dicebear.com/6.x/shapes/svg?seed=${selectedResource}`"
-                      size="xl"
+                      size="sm"
                     />
 
                     <span

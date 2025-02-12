@@ -21,8 +21,8 @@ export default defineEventHandler(async (event) => {
   // Check if the body is present
   if (!body) {
     throw createError({
-      message: "Missing required fields",
       statusCode: 400,
+      statusMessage: "Missing required fields",
     });
   }
 
@@ -33,8 +33,8 @@ export default defineEventHandler(async (event) => {
     console.log(parsedBody.error);
 
     throw createError({
-      message: "The provided parameters are invalid",
       statusCode: 400,
+      statusMessage: "The provided parameters are invalid",
     });
   }
 
@@ -60,8 +60,8 @@ export default defineEventHandler(async (event) => {
 
   if (!collection) {
     throw createError({
-      message: "Failed to create collection",
       statusCode: 500,
+      statusMessage: "Failed to create collection",
     });
   }
 
@@ -100,8 +100,8 @@ export default defineEventHandler(async (event) => {
 
   if (statusCode !== 201) {
     throw createError({
-      message: "Failed to create collection version",
       statusCode: 500,
+      statusMessage: "Failed to create collection version",
     });
   }
 

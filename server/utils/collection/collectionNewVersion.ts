@@ -45,8 +45,9 @@ export default async function (collectionId: number) {
 
     if (unpublishedVersions.length > 0) {
       throw createError({
-        message: "There are multiple unpublished versions of this collection",
         statusCode: 422,
+        statusMessage:
+          "There are multiple unpublished versions of this collection",
       });
     }
 

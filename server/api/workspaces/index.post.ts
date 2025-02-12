@@ -55,8 +55,8 @@ export default defineEventHandler(async (event) => {
 
     if (personalWorkspace) {
       throw createError({
-        message: "You already have a personal workspace",
         statusCode: 400,
+        statusMessage: "You already have a personal workspace",
       });
     }
   }
@@ -82,8 +82,8 @@ export default defineEventHandler(async (event) => {
 
   if (!workspace) {
     throw createError({
-      message: "Failed to create workspace",
       statusCode: 500,
+      statusMessage: "Failed to create workspace",
     });
   }
 

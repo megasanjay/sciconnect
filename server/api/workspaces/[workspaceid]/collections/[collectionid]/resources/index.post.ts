@@ -29,8 +29,8 @@ export default defineEventHandler(async (event) => {
   // Check if the body is present
   if (!body) {
     throw createError({
-      message: "Missing required fields",
       statusCode: 400,
+      statusMessage: "Missing required fields",
     });
   }
 
@@ -41,8 +41,8 @@ export default defineEventHandler(async (event) => {
     console.log(parsedBody.error);
 
     throw createError({
-      message: "The provided parameters are invalid",
       statusCode: 400,
+      statusMessage: "The provided parameters are invalid",
     });
   }
 
@@ -52,8 +52,8 @@ export default defineEventHandler(async (event) => {
 
   if (!collection) {
     throw createError({
-      message: "Collection not found",
       statusCode: 404,
+      statusMessage: "Collection not found",
     });
   }
 
@@ -65,8 +65,8 @@ export default defineEventHandler(async (event) => {
   // if there is no version return an error
   if (!version) {
     throw createError({
-      message: "No draft version found",
       statusCode: 404,
+      statusMessage: "No draft version found",
     });
   }
 

@@ -41,8 +41,8 @@ export default defineEventHandler(async (event) => {
     collectionAccess?.role !== "viewer"
   ) {
     throw createError({
-      message: "Unauthorized",
       statusCode: 401,
+      statusMessage: "Unauthorized",
     });
   }
 });

@@ -9,8 +9,8 @@ const workspacePermission = async (workspaceId: string, userId: string) => {
 
   if (!workspaceMember) {
     throw createError({
-      message: "Not a member of this workspace",
       statusCode: 403,
+      statusMessage: "Not a member of this workspace",
     });
   }
 

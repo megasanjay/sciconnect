@@ -29,7 +29,7 @@ const schema = z.object({
 type Schema = z.output<typeof schema>;
 
 const state = reactive({
-  name: faker.commerce.product(),
+  name: faker.commerce.productName(),
   description: faker.lorem.paragraph(),
   type: "project",
 });

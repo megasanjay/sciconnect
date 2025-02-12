@@ -19,8 +19,8 @@ export default defineEventHandler(async (event) => {
 
   if (!workspaceMember) {
     throw createError({
-      message: "Unauthorized",
       statusCode: 401,
+      statusMessage: "Unauthorized",
     });
   }
 
@@ -36,8 +36,8 @@ export default defineEventHandler(async (event) => {
 
   if (!collection) {
     throw createError({
-      message: "Collection not found",
       statusCode: 404,
+      statusMessage: "Collection not found",
     });
   }
 

@@ -4,8 +4,8 @@ export default defineEventHandler(async (event) => {
 
   if (!session) {
     throw createError({
-      message: "Unauthorized",
       statusCode: 401,
+      statusMessage: "Unauthorized",
     });
   }
 
@@ -14,8 +14,8 @@ export default defineEventHandler(async (event) => {
 
   if (!user) {
     throw createError({
-      message: "Unauthorized",
       statusCode: 401,
+      statusMessage: "Unauthorized",
     });
   }
 });

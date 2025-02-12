@@ -31,8 +31,8 @@ export default defineEventHandler(async (event) => {
 
   if (!collectionAccess) {
     throw createError({
-      message: "Unauthorized - No collection access found",
       statusCode: 401,
+      statusMessage: "Unauthorized - No collection access found",
     });
   }
 
@@ -42,8 +42,8 @@ export default defineEventHandler(async (event) => {
     collectionAccess?.role !== "editor"
   ) {
     throw createError({
-      message: "Unauthorized",
       statusCode: 401,
+      statusMessage: "Unauthorized",
     });
   }
 
