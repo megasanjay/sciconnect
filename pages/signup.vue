@@ -54,6 +54,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     .then(async () => {
       toast.add({
         title: "Account created successfully",
+        color: "success",
         description: "You can now login",
         icon: "material-symbols:check-circle-outline",
       });

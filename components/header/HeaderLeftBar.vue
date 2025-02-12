@@ -150,6 +150,7 @@ const fetchAllResources = async (
 
     toast.add({
       title: "Something went wrong",
+      color: "error",
       description: "We couldn't load your resources",
       icon: "material-symbols:error",
     });

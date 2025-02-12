@@ -17,6 +17,9 @@
     "prisma:studio": "prisma studio",
     "prisma:db:push": "prisma db push",
     "prisma:db:pull": "prisma db pull",
+    "scripts:truncate:tables": "tsx ./scripts/truncate-tables.ts",
+    "scripts:fetch:save:identifiers": "tsx ./scripts/fetch-save-identifiers.ts",
+    "scripts:compare:identifiers": "tsx ./scripts/compare-identifiers.ts",
     "postinstall": "nuxt prepare && prisma generate",
     "prune-branches": "git removed-branches --prune --force"
   },

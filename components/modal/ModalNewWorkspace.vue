@@ -44,6 +44,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
       toast.add({
         title: "Workspace created",
+        color: "success",
         description: "You can now access your workspace",
         icon: "material-symbols:check-circle-outline",
       });

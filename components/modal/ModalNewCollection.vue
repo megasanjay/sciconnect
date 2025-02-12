@@ -54,6 +54,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
       toast.add({
         title: "Collection created",
+        color: "success",
         description: "You can now access your collection",
         icon: "material-symbols:check-circle-outline",
       });
