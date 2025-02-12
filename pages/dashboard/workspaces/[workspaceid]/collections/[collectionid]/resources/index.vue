@@ -250,7 +250,7 @@ const selectIcon = (type: string) => {
           </p>
 
           <div
-            class="flex w-full items-center space-x-1 border-t border-slate-400 pt-3 pb-4"
+            class="flex w-full items-center gap-2 border-t border-slate-400 pt-3 pb-4"
           >
             <UBadge
               :color="resource.identifierType ? 'info' : 'error'"
@@ -260,9 +260,7 @@ const selectIcon = (type: string) => {
               {{ resource.identifierType || "No identifier provided" }}
             </UBadge>
 
-            <div>
-              <USeparator orientation="vertical" />
-            </div>
+            <USeparator orientation="vertical" class="h-5" />
 
             <div class="group w-max">
               <ULink
