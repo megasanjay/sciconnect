@@ -28,7 +28,6 @@ interface Collections extends Array<Collection> {}
 
 interface CollectionAccessUser {
   id: string;
-  username: string;
   name: string;
   created: string;
   emailAddress: string;
