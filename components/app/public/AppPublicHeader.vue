@@ -23,9 +23,7 @@ const logout = async () => {
           Profile
         </NuxtLink>
 
-        <NuxtLink to="/settings" class="text-base font-medium">
-          Settings
-        </NuxtLink>
+        <NuxtLink to="/view" class="text-base font-medium"> Catalog </NuxtLink>
       </div>
 
       <AuthState v-slot="{ loggedIn }">

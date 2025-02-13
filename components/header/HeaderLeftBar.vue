@@ -39,8 +39,6 @@ const allCollections = computed(() => {
 const currentCollection = computed(() => {
   const allCollections = collectionStore.collections;
 
-  console.log(allCollections, "ac");
-
   return allCollections.find(
     (collection: Collection) => collection.id === selectedCollection.value,
   );

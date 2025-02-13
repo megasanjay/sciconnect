@@ -240,8 +240,8 @@ model ExternalRelation {
     originalRelation   ExternalRelation? @relation("OriginalExternalRelation", fields: [originalRelationId], references: [id])
     originalRelationId String?
 
-    target      String // the actual identifier (10.1234/abc)
-    target_type String // doi, url, ror, orcid, etc (prefix from identifiers.org)
+    target     String // the actual identifier (10.1234/abc)
+    targetType String // doi, url, ror, orcid, etc (prefix from identifiers.org)
 
     type         String // isCitedBy, etc 
     resourceType String? // Book, Article, etc

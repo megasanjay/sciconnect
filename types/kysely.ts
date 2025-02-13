@@ -37,7 +37,7 @@ export type ExternalRelation = {
     sourceId: string;
     originalRelationId: string | null;
     target: string;
-    target_type: string;
+    targetType: string;
     type: string;
     resourceType: string | null;
     action: string | null;

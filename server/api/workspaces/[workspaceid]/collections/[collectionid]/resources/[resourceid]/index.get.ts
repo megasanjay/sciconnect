@@ -28,6 +28,7 @@ export default defineEventHandler(async (event) => {
   const version = await prisma.version.findFirst({
     where: {
       collectionId,
+      published: false,
     },
   });
 

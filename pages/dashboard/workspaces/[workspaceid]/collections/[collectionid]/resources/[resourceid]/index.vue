@@ -39,7 +39,7 @@ if (error.value) {
   });
 
   navigateTo(
-    `/dashboard/workspaces/${workspaceid}/collections/${collectionid}`,
+    `/dashboard/workspaces/${workspaceid}/collections/${collectionid}/resources`,
   );
 }
 
@@ -270,7 +270,7 @@ const createNewVersion = async () => {
                     'action' in resource &&
                     resource?.action !== 'newVersion'
                   "
-                  variant="ghost"
+                  variant="outline"
                   size="lg"
                   :disabled="disableEditing"
                   :loading="newResourceVersionLoadingIndicator"
