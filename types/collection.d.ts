@@ -43,7 +43,7 @@ interface CollectionCreator {
   familyName: string;
   givenName: string;
   identifier: string;
-  identifierType: string | null;
+  identifierType: string | undefined;
   nameType: string;
 }
 
