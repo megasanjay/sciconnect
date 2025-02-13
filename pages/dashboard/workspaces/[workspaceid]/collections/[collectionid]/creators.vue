@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { z } from "zod";
-import type { FormErrorEvent, FormSubmitEvent } from "#ui/types";
+import type { FormErrorEvent, FormSubmitEvent, FormError } from "#ui/types";
 import { faker } from "@faker-js/faker";
 
 definePageMeta({
@@ -16,23 +15,10 @@ const { collectionid, workspaceid } = useRoute().params as {
 const toast = useToast();
 
 const loading = ref(false);
-const showCreatorDrawer = ref(true);
+const showCreatorDrawer = ref(false);
 const drawerAction = ref<"Add" | "Edit">("Add");
 
 const createForm = useTemplateRef("createForm");
-
-const schema = z.object({
-  affiliation: z.string(),
-  creatorIndex: z.number().min(1, "Creator index is required"),
-  creatorName: z.string(),
-  familyName: z.string().min(1, "Family name is required"),
-  givenName: z.string().min(1, "Given name is required"),
-  identifier: z.string(),
-  identifierType: z.string().nullable(),
-  nameType: z.string().min(1, "Name type is required"),
-});
-
-type Schema = z.infer<typeof schema>;
 
 const creators = ref<CollectionCreator[]>([]);
 
@@ -51,6 +37,28 @@ const nameTypeOptions = [
   { label: "Personal", value: "Personal" },
   { label: "Organizational", value: "Organizational" },
 ];
+
+const validateForm = (_state: any): FormError[] => {
+  const errors = [];
+
+  if (!selectedCreator.value.nameType)
+    errors.push({ name: "nameType", message: "Required" });
+
+  if (!selectedCreator.value.givenName)
+    errors.push({ name: "givenName", message: "Required" });
+
+  if (selectedCreator.value.identifierType) {
+    if (!selectedCreator.value.identifier)
+      errors.push({ name: "identifier", message: "Required" });
+  }
+
+  if (selectedCreator.value.identifier) {
+    if (!selectedCreator.value.identifierType)
+      errors.push({ name: "identifierType", message: "Required" });
+  }
+
+  return errors;
+};
 
 const generateIdentifierTypeOptions = (nameType: string = "Personal") => {
   if (nameType === "Personal") {
@@ -204,43 +212,39 @@ const saveCreators = async () => {
     });
 };
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event);
-  console.log(selectedCreator.value);
-  console.log(drawerAction.value);
+async function onSubmit(_event: FormSubmitEvent<any>) {
+  if (drawerAction.value === "Edit") {
+    const index = creators.value.findIndex(
+      (creator) => creator.creatorIndex === selectedCreator.value.creatorIndex,
+    );
 
-  // if (drawerAction.value === "Edit") {
-  //   const index = creators.value.findIndex(
-  //     (creator) => creator.creatorIndex === selectedCreator.value.creatorIndex,
-  //   );
+    if (index !== -1) {
+      creators.value[index] = {
+        affiliation: selectedCreator.value.affiliation,
+        creatorIndex: selectedCreator.value.creatorIndex,
+        creatorName: selectedCreator.value.creatorName,
+        familyName: selectedCreator.value.familyName,
+        givenName: selectedCreator.value.givenName,
+        identifier: selectedCreator.value.identifier,
+        identifierType: selectedCreator.value.identifierType,
+        nameType: selectedCreator.value.nameType,
+      };
+    }
+  } else {
+    // add the creator to the list
+    creators.value.push({
+      affiliation: selectedCreator.value.affiliation,
+      creatorIndex: selectedCreator.value.creatorIndex,
+      creatorName: selectedCreator.value.creatorName,
+      familyName: selectedCreator.value.familyName,
+      givenName: selectedCreator.value.givenName,
+      identifier: selectedCreator.value.identifier,
+      identifierType: selectedCreator.value.identifierType,
+      nameType: selectedCreator.value.nameType,
+    });
+  }
 
-  //   if (index !== -1) {
-  //     creators.value[index] = {
-  //       affiliation: selectedCreator.value.affiliation,
-  //       creatorIndex: selectedCreator.value.creatorIndex,
-  //       creatorName: selectedCreator.value.creatorName,
-  //       familyName: selectedCreator.value.familyName,
-  //       givenName: selectedCreator.value.givenName,
-  //       identifier: selectedCreator.value.identifier,
-  //       identifierType: selectedCreator.value.identifierType,
-  //       nameType: selectedCreator.value.nameType,
-  //     };
-  //   }
-  // } else {
-  //   // add the creator to the list
-  //   creators.value.push({
-  //     affiliation: selectedCreator.value.affiliation,
-  //     creatorIndex: selectedCreator.value.creatorIndex,
-  //     creatorName: selectedCreator.value.creatorName,
-  //     familyName: selectedCreator.value.familyName,
-  //     givenName: selectedCreator.value.givenName,
-  //     identifier: selectedCreator.value.identifier,
-  //     identifierType: selectedCreator.value.identifierType,
-  //     nameType: selectedCreator.value.nameType,
-  //   });
-  // }
-
-  // await saveCreators();
+  await saveCreators();
 }
 
 function onError(event: FormErrorEvent) {
@@ -288,7 +292,7 @@ function onError(event: FormErrorEvent) {
         </p>
 
         <div v-if="creators.length > 0">
-          <!-- <ClientOnly>
+          <ClientOnly>
             <VueDraggable
               v-model="creators"
               tag="div"
@@ -300,7 +304,7 @@ function onError(event: FormErrorEvent) {
             >
               <template #item="{ element }">
                 <div
-                  class="my-1 flex w-full flex-row justify-start rounded-lg border bg-white"
+                  class="my-1 flex w-full flex-row items-center justify-start rounded-lg border border-zinc-300 bg-white"
                 >
                   <div
                     class="flex items-center justify-center py-3 pl-3 text-slate-700 transition-all hover:text-slate-500"
@@ -313,9 +317,7 @@ function onError(event: FormErrorEvent) {
                     <Icon name="icon-park-outline:drag" size="20" />
                   </div>
 
-                  <div class="py-3">
-                    <USeparator orientation="vertical" class="h-5" />
-                  </div>
+                  <USeparator orientation="vertical" class="mx-2 h-5" />
 
                   <div
                     class="flex w-full items-center justify-between py-3 pr-3"
@@ -345,7 +347,7 @@ function onError(event: FormErrorEvent) {
                         v-if="element.identifierType === 'ORCID'"
                         :to="`https://orcid.org/${element.identifier}`"
                         target="__blank"
-                        class="text-lime-400/80 transition-all hover:text-lime-500"
+                        class="flex items-center text-lime-400/80 transition-all hover:text-lime-500"
                       >
                         <Icon name="simple-icons:orcid" size="20" />
                       </ULink>
@@ -354,7 +356,7 @@ function onError(event: FormErrorEvent) {
                         v-if="element.identifierType === 'ROR'"
                         :to="`https://ror.org/${element.identifier}`"
                         target="__blank"
-                        class="text-blue-400/80 transition-all hover:text-blue-500"
+                        class="flex items-center text-blue-400/80 transition-all hover:text-blue-500"
                       >
                         <Icon name="academicons:ror-square" size="25" />
                       </ULink>
@@ -363,7 +365,7 @@ function onError(event: FormErrorEvent) {
                         v-if="element.identifierType === 'ISNI'"
                         :to="`https://isni.org/${element.identifier}`"
                         target="__blank"
-                        class="text-blue-400/80 transition-all hover:text-blue-500"
+                        class="flex items-center text-blue-400/80 transition-all hover:text-blue-500"
                       >
                         <Icon name="academicons:isni" size="25" />
                       </ULink>
@@ -402,7 +404,7 @@ function onError(event: FormErrorEvent) {
                 </div>
               </template>
             </VueDraggable>
-          </ClientOnly> -->
+          </ClientOnly>
         </div>
 
         <div v-else description="No creators added" />
@@ -417,7 +419,7 @@ function onError(event: FormErrorEvent) {
           <template #body>
             <UForm
               ref="createForm"
-              :schema="schema"
+              :validate="validateForm"
               :state="selectedCreator"
               class="space-y-4"
               @submit="onSubmit"
@@ -471,7 +473,7 @@ function onError(event: FormErrorEvent) {
               <UFormField label="Identifier Type" name="identifierType">
                 <div class="flex items-center gap-2">
                   <USelect
-                    v-model="selectedCreator.identifierType"
+                    v-model="selectedCreator.identifierType as string"
                     :items="
                       generateIdentifierTypeOptions(selectedCreator.nameType)
                     "
@@ -495,15 +497,7 @@ function onError(event: FormErrorEvent) {
                   placeholder="10.1234/abc"
                 />
               </UFormField>
-
-              <UButton color="primary" size="lg" type="submit">
-                Save Creator
-              </UButton>
             </UForm>
-
-            <pre
-              >{{ selectedCreator }}
-            </pre>
           </template>
 
           <template #footer>

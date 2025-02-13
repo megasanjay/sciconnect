@@ -58,7 +58,7 @@
     "vue3-apexcharts": "^1.8.0",
     "vue3-lottie": "^3.3.1",
     "vue3-marquee": "^4.2.2",
-    "vuedraggable": "^2.24.3",
+    "vuedraggable": "^4.1.0",
     "wordcloud": "^1.2.3"
   },
   "devDependencies": {
