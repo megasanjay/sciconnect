@@ -3,17 +3,7 @@ export default defineEventHandler(async (event) => {
     identifier: string;
   };
 
-  // Only collection identifiers are allowed
-  const regex = /^[c]\d+/;
-
-  if (!regex.test(identifier)) {
-    throw createError({
-      message: "Invalid identifier",
-      statusCode: 400,
-    });
-  }
-
-  const collectionId = parseInt(identifier.slice(1));
+  const collectionId = parseInt(identifier);
 
   const collection = await prisma.collection.findUnique({
     where: { id: collectionId, private: false },

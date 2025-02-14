@@ -192,13 +192,10 @@ if (starStatusData.value) {
 const starCollection = async () => {
   starLoading.value = true;
 
-  await $fetch(
-    `/api/discover/collections/${data.value?.collection.identifier}/star`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-      method: "POST",
-    },
-  )
+  await $fetch(`/api/discover/collections/${data.value?.collection.id}/star`, {
+    headers: useRequestHeaders(["cookie"]),
+    method: "POST",
+  })
     .then(() => {
       toast.add({
         title: "Collection starred",
@@ -228,13 +225,10 @@ const starCollection = async () => {
 const removeCollectionStar = async () => {
   starLoading.value = true;
 
-  await $fetch(
-    `/api/discover/collections/${data.value?.collection.identifier}/star`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-      method: "DELETE",
-    },
-  )
+  await $fetch(`/api/discover/collections/${data.value?.collection.id}/star`, {
+    headers: useRequestHeaders(["cookie"]),
+    method: "DELETE",
+  })
     .then(() => {
       toast.add({
         title: "Collection unstarred",
@@ -527,7 +521,7 @@ const copyToClipboard = (input: string) => {
         orientation="horizontal"
         variant="link"
         class="w-full gap-4"
-        default-value="0"
+        default-value="5"
         :ui="{ trigger: 'cursor-pointer' }"
       >
         <template #resources>
@@ -625,9 +619,19 @@ const copyToClipboard = (input: string) => {
           />
         </template>
 
-        <template #analytics> analytics </template>
+        <template #analytics>
+          <DiscoverCollectionViewsChart
+            class="py-5"
+            :collection-identifier="data?.collection.id || 0"
+          />
 
-        <template #impact> impact </template>
+          <DiscoverVersionResolutionsChart
+            class="py-5"
+            :version-identifier="data?.id || 0"
+          />
+        </template>
+
+        <template #impact> <DiscoverImpactCloud /> </template>
       </UTabs>
 
       <n-tabs
@@ -661,38 +665,6 @@ const copyToClipboard = (input: string) => {
             }"
             :resources="(data?.Resource as unknown as ResourceType[]) || []"
           />
-        </n-tab-pane>
-
-        <n-tab-pane name="analytics" tab="Analytics">
-          <template #tab>
-            <n-flex align="center" class="px-2">
-              <Icon name="bi:bar-chart-fill" size="18" />
-
-              <span class="font-medium"> Analytics</span>
-            </n-flex>
-          </template>
-
-          <DiscoverCollectionViewsChart
-            class="py-5"
-            :collection-identifier="data?.collection.id || ''"
-          />
-
-          <DiscoverVersionResolutionsChart
-            class="py-5"
-            :version-identifier="data?.id || ''"
-          />
-        </n-tab-pane>
-
-        <n-tab-pane name="impact" tab="Impact">
-          <template #tab>
-            <n-flex align="center" class="px-2">
-              <Icon name="ph:list-heart" size="18" />
-
-              <span class="font-medium"> Impact</span>
-            </n-flex>
-          </template>
-
-          <DiscoverImpactCloud />
         </n-tab-pane>
       </n-tabs>
     </div>
