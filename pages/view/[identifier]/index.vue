@@ -527,7 +527,7 @@ const copyToClipboard = (input: string) => {
         orientation="horizontal"
         variant="link"
         class="w-full gap-4"
-        default-value="3"
+        default-value="0"
         :ui="{ trigger: 'cursor-pointer' }"
       >
         <template #resources>
@@ -548,7 +548,7 @@ const copyToClipboard = (input: string) => {
                 </div>
               </div>
 
-              <div class="flex w-full flex-col gap-2">
+              <div class="flex w-full flex-col gap-3">
                 <div
                   v-for="(resource, idx) of group || []"
                   :key="idx"
@@ -725,7 +725,5 @@ const copyToClipboard = (input: string) => {
         "
       ></div>
     </div>
-
-    <n-back-top />
   </main>
 </template>

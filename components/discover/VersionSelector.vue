@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useClipboard } from "@vueuse/core";
+import { useQRCode } from "@vueuse/integrations/useQRCode";
 
-defineProps({
+const props = defineProps({
   collectionIdentifier: {
     required: true,
     type: Number,
@@ -18,23 +19,23 @@ defineProps({
 
 const toast = useToast();
 
+const qrcode = useQRCode(
+  `https://sciconnect.io/view/c${props.collectionIdentifier}`,
+);
 const showCollectionIdentifierQRCodeModal = ref(false);
 
 const handleDownloadQRCode = () => {
-  const canvas = document
-    .querySelector("#qr-code")
-    ?.querySelector<HTMLCanvasElement>("canvas");
+  console.log(qrcode.value);
 
-  if (canvas) {
-    const url = canvas.toDataURL();
-    const a = document.createElement("a");
+  // image data is in the format "data:image/png;base64,...."
 
-    a.download = "QRCode.png";
-    a.href = url;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
+  const a = document.createElement("a");
+
+  a.download = "QRCode.png";
+  a.href = qrcode.value;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };
 
 const copyToClipboard = (input: string) => {
@@ -66,126 +67,94 @@ const copyToClipboard = (input: string) => {
 </script>
 
 <template>
-  <div>
-    <n-alert type="info" class="mt-3 mb-5" title="Info">
-      <div class="flex items-center justify-between gap-5">
-        <p class="text-base">
-          If you want to always link to the latest version, use the
-          <NuxtLink
-            :to="`/view/c${collectionIdentifier}`"
-            class="text-sky-500 transition-all hover:text-sky-400"
-          >
-            c{{ collectionIdentifier }}</NuxtLink
-          >
-          identifier.
-        </p>
+  <div class="flex flex-col gap-4">
+    <UAlert title="Info" color="info" icon="i-lucide-terminal" variant="soft">
+      <template #description>
+        <div class="flex items-center justify-between gap-5">
+          <p class="text-md text-slate-700 dark:text-slate-400">
+            If you want to always link to the latest version, use the
+            <NuxtLink
+              :to="`/view/c${collectionIdentifier}`"
+              class="text-sky-500 transition-all hover:text-sky-400"
+            >
+              c{{ collectionIdentifier }}</NuxtLink
+            >
+            identifier.
+          </p>
 
-        <n-flex>
-          <n-popover trigger="hover">
-            <template #trigger>
-              <n-button
-                color="black"
-                class="dark:text-white"
-                @click="showCollectionIdentifierQRCodeModal = true"
-              >
-                <template #icon>
-                  <Icon name="fluent:qr-code-20-regular" size="18" />
-                </template>
-              </n-button>
-            </template>
+          <div class="flex gap-2">
+            <UModal v-model="showCollectionIdentifierQRCodeModal">
+              <UButton
+                color="neutral"
+                variant="subtle"
+                size="xs"
+                icon="fluent:qr-code-20-regular"
+              />
 
-            <span> Create a shareable QR code </span>
-          </n-popover>
+              <template #content>
+                <UCard>
+                  <div class="flex w-full items-center justify-center">
+                    <img id="qr-code" :src="qrcode" alt="QR Code" />
+                  </div>
 
-          <n-popover trigger="hover">
-            <template #trigger>
-              <n-button
-                color="black"
-                class="dark:text-white"
+                  <template #footer>
+                    <div class="flex w-full items-center justify-center">
+                      <UButton
+                        label="Download QR Code"
+                        color="neutral"
+                        variant="subtle"
+                        icon="fluent:qr-code-20-regular"
+                        @click="handleDownloadQRCode"
+                      />
+                    </div>
+                  </template>
+                </UCard>
+              </template>
+            </UModal>
+
+            <UPopover mode="hover">
+              <UButton
+                color="neutral"
+                variant="subtle"
+                icon="solar:copy-bold"
+                size="xs"
                 @click="
                   copyToClipboard(
                     `https://scholarstack.io/view/${collectionIdentifier}`,
                   )
                 "
-              >
-                <template #icon>
-                  <Icon name="solar:copy-bold" size="18" />
-                </template>
-              </n-button>
-            </template>
+              />
 
-            <span> Copy this URL to your clipboard </span>
-          </n-popover>
-
-          <n-modal
-            v-model:show="showCollectionIdentifierQRCodeModal"
-            transform-origin="center"
-          >
-            <n-card
-              style="width: 600px"
-              :bordered="false"
-              role="dialog"
-              size="huge"
-              aria-modal="true"
-            >
-              <n-flex vertical align="center">
-                <n-qr-code
-                  id="qr-code"
-                  :value="`https://scholarstack.io/view/${collectionIdentifier}`"
-                  icon-src="/logo/logo.svg"
-                  error-correction-level="Q"
-                  :size="150"
-                  class="!p-0"
-                />
-
-                <n-button @click="handleDownloadQRCode"> Download </n-button>
-              </n-flex>
-            </n-card>
-          </n-modal>
-        </n-flex>
-      </div>
-    </n-alert>
+              <template #content>
+                <span class="px-2 py-1 text-sm">
+                  Copy this URL to your clipboard.
+                </span>
+              </template>
+            </UPopover>
+          </div>
+        </div>
+      </template>
+    </UAlert>
 
     <div class="flex flex-col">
       <div
         v-for="version in versions"
         :key="version.id"
-        class="rounded-md px-3 py-3"
+        class="border-b border-stone-200 px-3 py-3"
         :class="{
-          'border border-stone-200 bg-stone-50':
+          'rounded-md border border-stone-200 bg-stone-50':
             version.id === selectedVersionIdentifier,
         }"
       >
         <div class="flex items-center justify-between">
           <div class="flex flex-col">
-            <div class="flex">
+            <div class="flex gap-3">
               <NuxtLink
                 :to="`/view/v${version.id}`"
                 class="text-base text-sky-500 transition-all hover:text-sky-400"
               >
                 Version {{ version.name }}
               </NuxtLink>
-
-              <n-popover trigger="hover">
-                <template #trigger>
-                  <n-button
-                    size="small"
-                    class="text-blue-500"
-                    text
-                    @click="
-                      copyToClipboard(
-                        `https://scholarstack.io/view/v${version.identifier}`,
-                      )
-                    "
-                  >
-                    <template #icon>
-                      <Icon name="solar:copy-bold" size="15" />
-                    </template>
-                  </n-button>
-                </template>
-
-                <span> Copy this URL to your clipboard </span>
-              </n-popover>
             </div>
 
             <NuxtLink
@@ -202,7 +171,25 @@ const copyToClipboard = (input: string) => {
             </NuxtLink>
           </div>
 
-          <div class="flex flex-col">
+          <div class="flex flex-col items-end gap-1">
+            <UPopover mode="hover">
+              <UButton
+                color="neutral"
+                variant="subtle"
+                size="xs"
+                icon="solar:copy-bold"
+                @click="
+                  copyToClipboard(`https://sciconnect.io/view/v${version.id}`)
+                "
+              />
+
+              <template #content>
+                <span class="px-2 py-1 text-sm">
+                  Copy this URL to your clipboard.
+                </span>
+              </template>
+            </UPopover>
+
             <time
               class="text-sm"
               :class="{

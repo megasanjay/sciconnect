@@ -43,13 +43,11 @@ const items = ref([
   <AuthState>
     <template #default="{ loggedIn, user }">
       <NuxtLink v-if="!loggedIn" to="/login">
-        <n-button size="large">
-          <span> Log in </span>
-        </n-button>
+        <UButton size="lg" label="Log in" />
       </NuxtLink>
 
       <NuxtLink v-if="!loggedIn" to="/register">
-        <n-button color="black" size="large"> Get started </n-button>
+        <UButton size="lg" label="Get started" />
       </NuxtLink>
 
       <UDropdownMenu
@@ -72,9 +70,7 @@ const items = ref([
 
     <template #placeholder>
       <!-- this will be rendered on server side -->
-      <n-spin size="small">
-        <div class="h-[35px] w-[35px] rounded-full bg-yellow-50"></div>
-      </n-spin>
+      <USkeleton class="h-12 w-12 rounded-full" />
     </template>
   </AuthState>
 </template>
