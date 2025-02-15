@@ -174,7 +174,7 @@ const selectedVersionIdentifier = computed(() => {
 });
 
 const { data: starStatusData, error: starStatusError } = await useFetch(
-  `/api/discover/collections/c${data.value?.collection.id}/star`,
+  `/api/discover/collections/${data.value?.collection.id}/star`,
   {
     headers: useRequestHeaders(["cookie"]),
   },

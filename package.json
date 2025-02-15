@@ -21,7 +21,8 @@
     "scripts:fetch:save:identifiers": "tsx ./scripts/fetch-save-identifiers.ts",
     "scripts:compare:identifiers": "tsx ./scripts/compare-identifiers.ts",
     "postinstall": "nuxt prepare && prisma generate",
-    "prune-branches": "git removed-branches --prune --force"
+    "prune-branches": "git removed-branches --prune --force",
+    "reset": "rm -rf node_modules && rm -rf .nuxt && rm -rf dist && rm -rf .output && yarn install"
   },
   "dependencies": {
     "@codemirror/view": "^6.36.2",

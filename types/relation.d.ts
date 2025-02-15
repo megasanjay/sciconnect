@@ -1,9 +1,9 @@
 interface InternalRelation {
   id: string;
   type: string | null;
-  target_id: string | null;
-  original_relation_id?: string | null;
-  resource_type: string | null;
+  targetId: string | null;
+  originalRelationId?: string | null;
+  resourceType: string | null;
   created: Date;
   updated: Date;
   action?: string;
@@ -13,10 +13,10 @@ interface InternalRelation {
 interface ExternalRelation {
   id: string;
   type: string | null;
-  original_relation_id?: string | null;
+  originalRelationId?: string | null;
   target: string;
-  target_type: string | null;
-  resource_type: string | null;
+  targetType: string | null;
+  resourceType: string | null;
   created: Date;
   updated: Date;
   action?: string;
@@ -33,9 +33,9 @@ interface GroupedRelation {
   type: string | null;
   external: boolean;
   target: string | null;
-  original_relation_id?: string | null;
-  target_type: string | null;
-  resource_type: string | null;
+  originalRelationId?: string | null;
+  targetType: string | null;
+  resourceType: string | null;
   created: Date;
   updated: Date;
   source: string | null;
@@ -48,11 +48,11 @@ interface GroupedRelations {
 
 interface CatalogInternalRelation {
   id: string;
-  source_id: string;
-  original_relation_id: string | null;
-  target_id: string;
+  sourceId: string;
+  originalRelationId: string | null;
+  targetId: string;
   type: string;
-  resource_type: string;
+  resourceType: string;
   action: null;
   mirror: boolean;
   created: Date;
@@ -61,12 +61,12 @@ interface CatalogInternalRelation {
 
 interface CatalogExternalRelation {
   id: string;
-  source_id: string;
-  original_relation_id: string | null;
+  sourceId: string;
+  originalRelationId: string | null;
   target: string;
-  target_type: string;
+  targetType: string;
   type: string;
-  resource_type: string;
+  resourceType: string;
   action: null;
   created: Date;
   updated: Date;
@@ -80,19 +80,17 @@ interface CatalogRelations {
 interface AllRelationsItem {
   id: string;
   action: string | null;
-  created: Date;
   external: boolean;
-  original_relation_id: string | null;
-  resource_type: string | null;
+  originalRelationId: string | null;
+  resourceType: string | null;
   source: string | null;
-  source_name: string | null;
-  source_original_id: string | null;
+  sourceName: string | null;
+  sourceOriginalId: string | null;
   target: string | null;
-  target_name?: string | null;
-  target_original_id?: string | null;
-  target_type?: string | null;
+  targetName?: string | null;
+  targetOriginalId?: string | null;
+  targetType?: string | null;
   type: string;
-  updated: Date;
 }
 
 type GR = {

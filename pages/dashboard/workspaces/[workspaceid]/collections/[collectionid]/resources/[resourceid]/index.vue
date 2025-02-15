@@ -348,13 +348,13 @@ const createNewVersion = async () => {
             </div>
           </div>
 
-          <n-flex v-if="resource?.backLinkId" align="center">
+          <div v-if="resource?.backLinkId" class="flex items-center">
             <span class="font-medium text-slate-500">Derived from</span>
 
             <UBadge type="info" size="sm">
               {{ resource?.backLinkId }}
             </UBadge>
-          </n-flex>
+          </div>
         </div>
       </div>
     </div>
