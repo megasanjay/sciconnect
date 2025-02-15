@@ -39,6 +39,8 @@ export default defineEventHandler(async (event) => {
 
   const draftVersion = await prisma.version.findFirst({
     include: {
+      ExternalRelation: true,
+      InternalRelation: true,
       Resource: true,
     },
     where: {
@@ -178,6 +180,32 @@ export default defineEventHandler(async (event) => {
       },
     });
   }
+
+  // Remove all deleted external relations
+  const externalRelations = draftVersion.ExternalRelation;
+
+  await prisma.externalRelation.deleteMany({
+    where: {
+      id: {
+        in: externalRelations
+          .filter((relation) => relation.action === "delete")
+          .map((relation) => relation.id),
+      },
+    },
+  });
+
+  // Remove all deleted internal relations
+  const internalRelations = draftVersion.InternalRelation;
+
+  await prisma.internalRelation.deleteMany({
+    where: {
+      id: {
+        in: internalRelations
+          .filter((relation) => relation.action === "delete")
+          .map((relation) => relation.id),
+      },
+    },
+  });
 
   // publish the the version
   await prisma.version.update({

@@ -158,7 +158,7 @@ const copyToClipboard = (input: string) => {
             </div>
 
             <NuxtLink
-              :to="`/view/${version.id}`"
+              :to="`/view/v${version.id}`"
               class="text-sm transition-all hover:text-slate-400 hover:underline"
               :class="{
                 'text-stone-600 dark:text-stone-600':

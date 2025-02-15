@@ -137,7 +137,7 @@ export default async function (collectionId: number) {
           originalRelationId: internalRelation.id,
           resourceType: internalRelation.resourceType,
           sourceId: resourceMap[internalRelation.sourceId],
-          targetId: internalRelation.targetId,
+          targetId: resourceMap[internalRelation.targetId],
           type: internalRelation.type,
           versionId: draftVersion.id,
         };

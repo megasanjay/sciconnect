@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { z } from "zod";
-import type { FormSubmitEvent } from "#ui/types";
+import type { FormError, FormSubmitEvent, FormErrorEvent } from "#ui/types";
 import { nanoid } from "nanoid";
 import { faker } from "@faker-js/faker";
 
@@ -32,16 +31,6 @@ const { collectionid, workspaceid } = route.params as {
 
 const createForm = useTemplateRef("createForm");
 
-const schema = z.object({
-  relationType: z.string().min(1),
-  resourceId: z.string().min(1),
-  resourceName: z.string().min(1),
-  resourceType: z.string().min(1),
-  type: z.string().min(1),
-});
-
-type Schema = z.output<typeof schema>;
-
 const typeOptions = PREFIX_JSON;
 const relationTypeOptions = RELATION_TYPE_JSON;
 const resourceTypeOptions = RESOURCE_TYPE_JSON;
@@ -66,6 +55,49 @@ const selectedRelation = ref<GroupedRelation>({
   type: null,
   updated: new Date(),
 });
+
+const validateForm = (_state: any): FormError[] => {
+  const errrors = [];
+
+  if (!selectedRelation.value.source) {
+    errrors.push({
+      name: "source",
+      message: "Source is required",
+    });
+  }
+
+  if (!selectedRelation.value.target) {
+    errrors.push({
+      name: "target",
+      message: "Target is required",
+    });
+  }
+
+  if (!selectedRelation.value.type) {
+    errrors.push({
+      name: "type",
+      message: "Relation type is required",
+    });
+  }
+
+  if (!selectedRelation.value.resourceType) {
+    errrors.push({
+      name: "resourceType",
+      message: "Resource type is required",
+    });
+  }
+
+  if (selectedRelation.value.external) {
+    if (!selectedRelation.value.targetType) {
+      errrors.push({
+        name: "targetType",
+        message: "Target type is required",
+      });
+    }
+  }
+
+  return errrors;
+};
 
 const currentCollection = computed(() => {
   return (
@@ -278,16 +310,24 @@ const getResourceIdentifierTypeName = (identifierType: string) => {
   return identifierType;
 };
 
-const addRelationFromDropdownOptions = [
-  {
-    key: "external",
-    label: "Add an external relation",
-  },
-  {
-    key: "internal",
-    label: "Add an internal relation",
-  },
-];
+const generateAddRelationFromDropdownOptions = (resourceid: string) => {
+  return [
+    {
+      key: "external",
+      label: "Add an external relation",
+      onSelect: () => {
+        openAddRelationDrawer("external", resourceid);
+      },
+    },
+    {
+      key: "internal",
+      label: "Add an internal relation",
+      onSelect: () => {
+        openAddRelationDrawer("internal", resourceid);
+      },
+    },
+  ];
+};
 
 const openAddRelationDrawer = (
   targetLocation: string,
@@ -330,8 +370,6 @@ const openEditRelationDrawer = (id: string) => {
   const relation = allRelations.value?.find((r) => r.id === id);
 
   if (relation) {
-    console.log(relation);
-
     getSourceResourceList();
     getTargetResourceList(relation.source || "");
 
@@ -664,15 +702,20 @@ const editRelation = async () => {
   }
 };
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data);
-
-  await $fetch("/api/discover");
-
+function onSubmit(_event: FormSubmitEvent<any>) {
   if (drawerAction.value === "Add") {
     addNewRelation();
   } else {
     editRelation();
+  }
+}
+
+function onError(event: FormErrorEvent) {
+  if (event?.errors?.[0]?.id) {
+    const element = document.getElementById(event.errors[0].id);
+
+    element?.focus();
+    element?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 }
 
@@ -803,6 +846,7 @@ const duplicationRelationExists = computed(() => {
           }
         }
       } else if (
+        relation in relations &&
         relations[relation].find((r) => {
           console.log(r);
           console.log(targetResource);
@@ -877,7 +921,7 @@ onMounted(() => {
       >
         <!-- <pre>{{ groupedResources }}</pre> -->
 
-        <!-- <pre>{{ targetResourceList }}</pre> -->
+        <pre class="text-xs">{{ targetResourceList }}</pre>
 
         <div
           v-for="(gr1, resourceID, idx) in groupedResources"
@@ -892,24 +936,25 @@ onMounted(() => {
               </span>
             </h2>
 
-            <div class="flex items-center space-x-2">
-              <n-dropdown
-                trigger="hover"
-                :options="addRelationFromDropdownOptions"
-                placement="bottom-end"
-                @select="
-                  (key: string) => {
-                    openAddRelationDrawer(key, resourceID as string);
-                  }
-                "
-              >
-                <UButton
-                  icon="mdi:plus"
-                  color="primary"
-                  label="Add a relation to this resource"
-                />
-              </n-dropdown>
-            </div>
+            <UDropdownMenu
+              :items="
+                generateAddRelationFromDropdownOptions(resourceID as string)
+              "
+              :content="{
+                align: 'end',
+                side: 'bottom',
+                sideOffset: 8,
+              }"
+              :ui="{
+                content: 'w-max',
+              }"
+            >
+              <UButton
+                icon="mdi:plus"
+                color="primary"
+                label="Add a relation to this resource"
+              />
+            </UDropdownMenu>
           </div>
 
           <div v-for="(gr, name, index) in gr1.relations" :key="index">
@@ -1046,105 +1091,137 @@ onMounted(() => {
       </div>
     </div>
 
-    <UForm
-      ref="createForm"
-      :schema="schema"
-      :state="selectedRelation"
+    <USlideover
+      v-model:open="showRelationDrawer"
+      :title="drawerAction === 'Add' ? 'Add a Relation' : 'Edit Relation'"
+      :description="
+        selectedRelation.external
+          ? 'External relations are created between a resouce in this collection and an outside resource.'
+          : 'Internal relations are created between two resources in this collection.'
+      "
       class="space-y-4"
-      @submit="onSubmit"
+      :ui="{ footer: 'justify-end' }"
     >
-      <UFormField label="Source" name="source">
-        <USelect
-          v-model="selectedRelation.source"
-          :disabled="
-            !!selectedRelation.originalRelationId ||
-            sourceResourceListLoadingIndicator ||
-            drawerAction === 'Edit'
-          "
-          :loading="sourceResourceListLoadingIndicator"
-          :items="sourceResourceList || []"
-        />
-      </UFormField>
+      <template #body>
+        <UForm
+          ref="createForm"
+          :validate="validateForm"
+          :state="selectedRelation"
+          class="space-y-4"
+          @submit="onSubmit"
+          @error="onError"
+        >
+          <UFormField label="Source" name="source">
+            <USelect
+              v-model="selectedRelation.source"
+              :disabled="
+                !!selectedRelation.originalRelationId ||
+                sourceResourceListLoadingIndicator ||
+                drawerAction === 'Edit'
+              "
+              :loading="sourceResourceListLoadingIndicator"
+              :items="sourceResourceList || []"
+              class="w-full"
+            />
+          </UFormField>
 
-      <USeparator class="my-5" />
+          <USeparator class="my-5" />
 
-      <UFormField v-if="selectedRelation.external" label="Target" name="target">
-        <UInput
-          v-model="selectedRelation.target"
-          :disabled="!!selectedRelation.originalRelationId"
-          placeholder="10.1234/abc"
-        />
-      </UFormField>
+          <UFormField
+            v-if="selectedRelation.external"
+            label="Target"
+            name="target"
+          >
+            <UInput
+              v-model="selectedRelation.target as string"
+              type="text"
+              :disabled="!!selectedRelation.originalRelationId"
+              placeholder="10.1234/abc"
+              class="w-full"
+            />
+          </UFormField>
 
-      <UFormField
-        v-if="!selectedRelation.external"
-        label="Target"
-        name="target"
-      >
-        <USelect
-          v-model="selectedRelation.target"
-          :disabled="
-            !!selectedRelation.originalRelationId ||
-            targetResourceListLoadingIndicator ||
-            !selectedRelation.source
-          "
-          :loading="targetResourceListLoadingIndicator"
-          :items="generateTargetResourceListOptions()"
-          @update:value="selectRelationResourceType"
-        />
-      </UFormField>
+          <UFormField
+            v-if="!selectedRelation.external"
+            label="Target"
+            name="target"
+          >
+            <USelect
+              v-model="selectedRelation.target"
+              :disabled="
+                !!selectedRelation.originalRelationId ||
+                targetResourceListLoadingIndicator ||
+                !selectedRelation.source
+              "
+              :loading="targetResourceListLoadingIndicator"
+              :items="generateTargetResourceListOptions()"
+              class="w-full"
+              @update:value="selectRelationResourceType"
+            />
+          </UFormField>
 
-      <UFormField
-        v-if="selectedRelation.external"
-        label="Target Type"
-        name="targetType"
-      >
-        <USelect
-          v-model="selectedRelation.targetType"
-          :disabled="!!selectedRelation.originalRelationId"
-          placeholder="DOI"
-        />
-      </UFormField>
+          <UFormField
+            v-if="selectedRelation.external"
+            label="Target Type"
+            name="targetType"
+          >
+            <USelect
+              v-model="selectedRelation.targetType as string"
+              :items="typeOptions"
+              :disabled="!!selectedRelation.originalRelationId"
+              placeholder="DOI"
+              class="w-full"
+            />
+          </UFormField>
 
-      <UFormField label="Relation Type" name="type">
-        <USelect
-          v-model="selectedRelation.type"
-          :options="relationTypeOptions"
-          placeholder="isPartOf"
-        />
-      </UFormField>
+          <UFormField label="Relation Type" name="type">
+            <USelect
+              v-model="selectedRelation.type as string"
+              :items="relationTypeOptions"
+              placeholder="isPartOf"
+              class="w-full"
+            />
+          </UFormField>
 
-      <UFormField label="Resource Type" name="resourceType">
-        <USelect
-          v-model="selectedRelation.resourceType"
-          :options="resourceTypeOptions"
-          placeholder="Dataset"
-        />
-      </UFormField>
+          <UFormField label="Resource Type" name="resourceType">
+            <USelect
+              v-model="selectedRelation.resourceType as string"
+              :items="resourceTypeOptions"
+              placeholder="Dataset"
+              class="w-full"
+            />
+          </UFormField>
 
-      <UAlert
-        v-if="mirrorRelationExists"
-        color="warning"
-        title="Warning"
-        description="This relation might already exist. We found an inverse relation for this source and target resource. Please check if you want to create a new relation in this instance."
-      />
+          <UAlert
+            v-if="mirrorRelationExists"
+            color="warning"
+            title="Warning"
+            description="This relation might already exist. We found an inverse relation for this source and target resource. Please check if you want to create a new relation in this instance."
+          />
 
-      <UAlert
-        v-if="duplicationRelationExists"
-        color="warning"
-        title="Warning"
-        description="This relation might already exist. We found a relation for this source and target resource. Please check if you want to create a new relation in this instance."
-      />
+          <UAlert
+            v-if="duplicationRelationExists"
+            color="warning"
+            title="Warning"
+            description="This relation might already exist. We found a relation for this source and target resource. Please check if you want to create a new relation in this instance."
+          />
+        </UForm>
+      </template>
 
-      <UButton
-        color="primary"
-        icon="material-symbols:save-sharp"
-        size="lg"
-        :loading="addNewRelationLoading || editRelationLoading"
-        :disabled="duplicationRelationExists"
-        type="submit"
-        label="Save relation"
-      />
-    </UForm>
+      <template #footer>
+        <UButton
+          color="primary"
+          icon="material-symbols:save-sharp"
+          size="lg"
+          :loading="addNewRelationLoading || editRelationLoading"
+          :disabled="duplicationRelationExists"
+          type="submit"
+          label="Save relation"
+          @click="createForm?.submit"
+        >
+          Save Creator
+        </UButton>
+      </template>
+    </USlideover>
   </main>
 </template>

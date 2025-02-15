@@ -83,7 +83,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Check if the relation has the 'deleted' action
-  if (relation.action !== "delete") {
+  if (relation.action === "delete") {
     throw createError({
       message:
         "Relation is marked for deletion. Restore the relation to edit it",

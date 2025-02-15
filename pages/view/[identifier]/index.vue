@@ -521,7 +521,6 @@ const copyToClipboard = (input: string) => {
         orientation="horizontal"
         variant="link"
         class="w-full gap-4"
-        default-value="5"
         :ui="{ trigger: 'cursor-pointer' }"
       >
         <template #resources>
@@ -605,7 +604,20 @@ const copyToClipboard = (input: string) => {
           </div>
         </template>
 
-        <template #relations> relations </template>
+        <template #relations>
+          <FlowRelationsGraph
+            class="vbackdrop-blur-xl vbackdrop-grayscale py-10"
+            :relations="{
+              internal:
+                (data?.InternalRelation as unknown as CatalogInternalRelation[]) ||
+                [],
+              external:
+                (data?.ExternalRelation as unknown as CatalogExternalRelation[]) ||
+                [],
+            }"
+            :resources="(data?.Resource as unknown as ResourceType[]) || []"
+          />
+        </template>
 
         <template #changelog>
           <MarkdownRender :content="data?.changelog" />
@@ -633,40 +645,6 @@ const copyToClipboard = (input: string) => {
 
         <template #impact> <DiscoverImpactCloud /> </template>
       </UTabs>
-
-      <n-tabs
-        type="line"
-        animated
-        default-value="resources"
-        class="px-3 md:px-7"
-      >
-        <n-tab-pane
-          name="relations"
-          tab="Relations"
-          display-directive="show:lazy"
-        >
-          <template #tab>
-            <n-flex align="center" class="px-2">
-              <Icon name="tabler:circles-relation" size="18" />
-
-              <span class="font-medium"> Relations</span>
-            </n-flex>
-          </template>
-
-          <FlowRelationsGraph
-            class="vbackdrop-blur-xl vbackdrop-grayscale py-10"
-            :relations="{
-              internal:
-                (data?.InternalRelation as unknown as CatalogInternalRelation[]) ||
-                [],
-              external:
-                (data?.ExternalRelation as unknown as CatalogExternalRelation[]) ||
-                [],
-            }"
-            :resources="(data?.Resource as unknown as ResourceType[]) || []"
-          />
-        </n-tab-pane>
-      </n-tabs>
     </div>
 
     <div
