@@ -61,9 +61,7 @@ const fetchAllWorkspaces = async (workspaceid: string) => {
 
   workspaceStore.getLoading = true;
 
-  const { data: workspaces, error } = await useFetch("/api/workspaces", {
-    headers: useRequestHeaders(["cookie"]),
-  });
+  const { data: workspaces, error } = await useFetch("/api/workspaces", {});
 
   workspaceStore.getLoading = false;
 
@@ -97,9 +95,7 @@ const fetchAllCollections = async (
 
   const { data: workspace, error } = await useFetch(
     `/api/workspaces/${workspaceid}`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-    },
+    {},
   );
 
   collectionStore.getLoading = false;
@@ -136,9 +132,7 @@ const fetchAllResources = async (
 
   const { data: collection, error } = await useFetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-    },
+    {},
   );
 
   resourceStore.getLoading = false;

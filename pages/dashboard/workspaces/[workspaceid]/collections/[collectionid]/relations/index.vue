@@ -113,9 +113,7 @@ const allRelations = ref<AllRelationsItem[]>([]);
 
 const { data, error } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/relations`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -184,9 +182,7 @@ const getSourceResourceList = async () => {
 
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/source`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-    },
+    {},
   )
     .then((response) => {
       sourceResourceList.value = response;
@@ -211,9 +207,7 @@ const getTargetResourceList = async (resourceid: string) => {
 
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/resources${resourceid ? `?resourceid=${resourceid}` : ``}`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-    },
+    {},
   )
     .then((response) => {
       targetResourceList.value = response;
@@ -424,7 +418,6 @@ const deleteRelation = async (relationid: string) => {
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/relations/${relation.external ? "external" : "internal"}/${relationid}`,
     {
-      headers: useRequestHeaders(["cookie"]),
       method: "DELETE",
     },
   )
@@ -501,7 +494,7 @@ const addNewRelation = async () => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/relations/external`,
       {
         body: JSON.stringify(d),
-        headers: useRequestHeaders(["cookie"]),
+
         method: "POST",
       },
     )
@@ -546,7 +539,7 @@ const addNewRelation = async () => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/relations/internal`,
       {
         body: JSON.stringify(d),
-        headers: useRequestHeaders(["cookie"]),
+
         method: "POST",
       },
     )
@@ -594,7 +587,7 @@ const editRelation = async () => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/relations/external/${selectedRelation.value.id}`,
       {
         body: JSON.stringify(d),
-        headers: useRequestHeaders(["cookie"]),
+
         method: "PUT",
       },
     )
@@ -653,7 +646,7 @@ const editRelation = async () => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/relations/internal/${selectedRelation.value.id}`,
       {
         body: JSON.stringify(d),
-        headers: useRequestHeaders(["cookie"]),
+
         method: "PUT",
       },
     )
@@ -740,7 +733,6 @@ const restoreRelation = async (relationid: string) => {
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/relations/${relation.external ? "external" : "internal"}/${relationid}`,
     {
-      headers: useRequestHeaders(["cookie"]),
       method: "PATCH",
     },
   )

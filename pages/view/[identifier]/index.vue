@@ -57,9 +57,7 @@ const tabItems = [
 
 const { data, error } = await useFetch(
   `/api/discover/collections/${identifier}`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -175,9 +173,7 @@ const selectedVersionIdentifier = computed(() => {
 
 const { data: starStatusData, error: starStatusError } = await useFetch(
   `/api/discover/collections/${data.value?.collection.id}/star`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (starStatusError.value) {
@@ -193,7 +189,6 @@ const starCollection = async () => {
   starLoading.value = true;
 
   await $fetch(`/api/discover/collections/${data.value?.collection.id}/star`, {
-    headers: useRequestHeaders(["cookie"]),
     method: "POST",
   })
     .then(() => {
@@ -226,7 +221,6 @@ const removeCollectionStar = async () => {
   starLoading.value = true;
 
   await $fetch(`/api/discover/collections/${data.value?.collection.id}/star`, {
-    headers: useRequestHeaders(["cookie"]),
     method: "DELETE",
   })
     .then(() => {

@@ -20,9 +20,7 @@ const { collectionid, workspaceid } = useRoute().params as {
 
 const { data: members, error } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/members`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -133,7 +131,6 @@ const {
 } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/members/viewers`,
   {
-    headers: useRequestHeaders(["cookie"]),
     lazy: true,
     server: false,
   },
@@ -185,7 +182,7 @@ const publisherManageMember = async (key: string) => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/members/publishers`,
       {
         body: JSON.stringify(body),
-        headers: useRequestHeaders(["cookie"]),
+
         method: "DELETE",
       },
     )
@@ -251,7 +248,7 @@ const editorManageMember = async (key: string) => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/members/admin`,
       {
         body: JSON.stringify(body),
-        headers: useRequestHeaders(["cookie"]),
+
         method: "PUT",
       },
     )
@@ -309,7 +306,7 @@ const editorManageMember = async (key: string) => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/members/editors`,
       {
         body: JSON.stringify(body),
-        headers: useRequestHeaders(["cookie"]),
+
         method: "DELETE",
       },
     )
@@ -372,7 +369,7 @@ const inviteMember = async () => {
     `/api/workspaces/${workspaceid}/collections/${collectionid}/members/editors`,
     {
       body: JSON.stringify(body),
-      headers: useRequestHeaders(["cookie"]),
+
       method: "POST",
     },
   )

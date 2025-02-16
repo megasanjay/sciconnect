@@ -14,9 +14,7 @@ const toast = useToast();
 
 const workspaceStore = useWorkspaceStore();
 
-const { data: workspaces, error } = await useFetch("/api/workspaces", {
-  headers: useRequestHeaders(["cookie"]),
-});
+const { data: workspaces, error } = await useFetch("/api/workspaces", {});
 
 if (error.value) {
   console.log(error.value);

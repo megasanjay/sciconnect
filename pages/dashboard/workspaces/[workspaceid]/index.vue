@@ -19,9 +19,7 @@ const { workspaceid } = route.params as { workspaceid: string };
 
 const { data: workspace, error } = await useFetch(
   `/api/workspaces/${workspaceid}`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {

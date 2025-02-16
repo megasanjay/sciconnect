@@ -38,9 +38,7 @@ const { collectionid, workspaceid } = useRoute().params as {
 
 const { data: collection, error } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -76,7 +74,6 @@ const discardDraftVersion = async () => {
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/version`,
     {
-      headers: useRequestHeaders(["cookie"]),
       method: "DELETE",
     },
   )
@@ -114,7 +111,6 @@ const hideCollection = async () => {
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/hide`,
     {
-      headers: useRequestHeaders(["cookie"]),
       method: "PUT",
     },
   )
@@ -142,7 +138,6 @@ const hideCollection = async () => {
 
 const deleteCollection = async () => {
   await $fetch(`/api/workspaces/${workspaceid}/collections/${collectionid}`, {
-    headers: useRequestHeaders(["cookie"]),
     method: "DELETE",
   })
     .then(() => {
@@ -178,7 +173,7 @@ const updateCollectionDetails = async () => {
       detailedDescription: collectionDetailedDescription.value.trim(),
       type: collectionType.value,
     }),
-    headers: useRequestHeaders(["cookie"]),
+
     method: "PUT",
   })
     .then((_res) => {
@@ -255,7 +250,7 @@ const updateThumbnail = async (evt: any) => {
       `/api/workspaces/${workspaceid}/collections/${collectionid}/thumbnail`,
       {
         body: formData,
-        headers: useRequestHeaders(["cookie"]),
+
         method: "PUT",
       },
     )

@@ -12,7 +12,6 @@ const {
 } = await useFetch<CollectionGETAPIResponse>(
   `/api/workspaces/${route.params.workspaceid}/collections/${route.params.collectionid}`,
   {
-    headers: useRequestHeaders(["cookie"]),
     lazy: true,
     server: false,
   },

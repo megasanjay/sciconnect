@@ -23,9 +23,7 @@ const { collectionid, resourceid, workspaceid } = route.params as {
 
 const { data: resource, error } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -102,7 +100,6 @@ const removeResource = async () => {
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
     {
-      headers: useRequestHeaders(["cookie"]),
       method: "DELETE",
     },
   )
@@ -147,7 +144,7 @@ const createNewVersion = async () => {
     `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}/new-version`,
     {
       body: JSON.stringify(body),
-      headers: useRequestHeaders(["cookie"]),
+
       method: "POST",
     },
   )

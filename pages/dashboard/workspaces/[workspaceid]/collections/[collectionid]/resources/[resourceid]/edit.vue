@@ -106,9 +106,7 @@ resourceTypeOptions.sort((a, b) => a.label.localeCompare(b.label));
 
 const { data: resource, error } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -182,7 +180,6 @@ async function onSubmit(event: FormSubmitEvent<any>) {
     `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
     {
       body: JSON.stringify(body),
-      headers: useRequestHeaders(["cookie"]),
       method: "PUT",
     },
   )

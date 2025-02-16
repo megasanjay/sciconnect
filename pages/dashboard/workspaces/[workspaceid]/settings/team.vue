@@ -57,9 +57,7 @@ const tabItems = [
 
 const { data: members, error } = await useFetch(
   `/api/workspaces/${workspaceid}/members`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -166,7 +164,7 @@ const manageMember = async (key: string) => {
 
     await $fetch(`/api/workspaces/${workspaceid}/members`, {
       body: JSON.stringify(body),
-      headers: useRequestHeaders(["cookie"]),
+
       method: "DELETE",
     })
       .then(async () => {
@@ -212,7 +210,7 @@ const manageMember = async (key: string) => {
 
     await $fetch(`/api/workspaces/${workspaceid}/members/admin`, {
       body: JSON.stringify(body),
-      headers: useRequestHeaders(["cookie"]),
+
       method: "POST",
     })
       .then(() => {
@@ -247,7 +245,7 @@ const manageMember = async (key: string) => {
 
     await $fetch(`/api/workspaces/${workspaceid}/members/admin`, {
       body: JSON.stringify(body),
-      headers: useRequestHeaders(["cookie"]),
+
       method: "DELETE",
     })
       .then(() => {
@@ -284,7 +282,7 @@ const cancelInvitation = async (memberId: string) => {
 
   await $fetch(`/api/workspaces/${workspaceid}/members/invitation`, {
     body: JSON.stringify({ emailAddress: memberId }),
-    headers: useRequestHeaders(["cookie"]),
+
     method: "DELETE",
   })
     .then(() => {
@@ -321,7 +319,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
   await $fetch(`/api/workspaces/${workspaceid}/members`, {
     body: JSON.stringify(body),
-    headers: useRequestHeaders(["cookie"]),
+
     method: "POST",
   })
     .then(() => {

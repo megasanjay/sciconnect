@@ -34,9 +34,7 @@ const fetchChartData = async () => {
   pending.value = true;
   await $fetch(
     `/api/discover/collections/${props.collectionIdentifier}/views`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-    },
+    {},
   )
     .then((data) => {
       console.log(data);

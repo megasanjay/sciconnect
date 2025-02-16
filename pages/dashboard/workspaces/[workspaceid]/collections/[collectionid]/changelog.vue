@@ -31,9 +31,7 @@ const { collectionid, workspaceid } = route.params as {
 
 const { data, error } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/version`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -81,7 +79,7 @@ const saveChangelog = async () => {
       body: JSON.stringify({
         changelog: changelog.value,
       }),
-      headers: useRequestHeaders(["cookie"]),
+
       method: "PUT",
     },
   )

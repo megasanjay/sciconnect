@@ -10,9 +10,7 @@ const loadingId = ref(0);
 
 const { data: collections, error } = await useFetch(
   `/api/workspaces/${workspaceid}/hidden`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -34,7 +32,6 @@ const unhideCollection = async (collectionId: number) => {
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionId}/unhide`,
     {
-      headers: useRequestHeaders(["cookie"]),
       method: "PUT",
     },
   )

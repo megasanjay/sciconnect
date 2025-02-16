@@ -13,9 +13,7 @@ const { workspaceid } = useRoute().params as { workspaceid: string };
 
 const { data: workspace, error } = await useFetch(
   `/api/workspaces/${workspaceid}`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -48,7 +46,7 @@ const updateWorkspaceDetails = async () => {
       title: workspaceName.value.trim(),
       description: workspaceDescription.value.trim(),
     }),
-    headers: useRequestHeaders(["cookie"]),
+
     method: "PUT",
   })
     .then((_res) => {

@@ -88,9 +88,7 @@ const normalizeCreators = (data: CollectionCreators = []) => {
 
 const { data, error } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/creators`,
-  {
-    headers: useRequestHeaders(["cookie"]),
-  },
+  {},
 );
 
 if (error.value) {
@@ -182,7 +180,7 @@ const saveCreators = async () => {
     `/api/workspaces/${workspaceid}/collections/${collectionid}/creators`,
     {
       body: JSON.stringify(data),
-      headers: useRequestHeaders(["cookie"]),
+
       method: "PUT",
     },
   )

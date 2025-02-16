@@ -20,9 +20,7 @@ const { collectionid, workspaceid } = route.params as {
 const { data: collection, error: collectionError } =
   await useFetch<CollectionGETAPIResponse>(
     `/api/workspaces/${workspaceid}/collections/${collectionid}`,
-    {
-      headers: useRequestHeaders(["cookie"]),
-    },
+    {},
   );
 
 if (collectionError.value) {
@@ -59,7 +57,6 @@ const {
 } = await useFetch(
   `/api/workspaces/${workspaceid}/collections/${collectionid}/validate`,
   {
-    headers: useRequestHeaders(["cookie"]),
     lazy: true,
     server: false,
   },
@@ -75,7 +72,6 @@ const publishCollection = async () => {
   await $fetch(
     `/api/workspaces/${workspaceid}/collections/${collectionid}/publish`,
     {
-      headers: useRequestHeaders(["cookie"]),
       method: "POST",
     },
   )
