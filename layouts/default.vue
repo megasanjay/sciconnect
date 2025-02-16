@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { loggedIn, user } = useUserSession();
 
+const devMode = process.env.NODE_ENV !== "production";
+
 // Showing an alert for now but can redirect to a verification page later if needed
 const emailVerified = computed(
   () => loggedIn.value && user.value?.emailVerified,
@@ -27,21 +29,19 @@ const emailVerified = computed(
           <div class="flex items-center gap-3 lg:order-2">
             <UiColorModeToggle />
 
-            <nuxt-link v-if="!loggedIn" to="/login">
-              <n-button size="large">
-                <span> Log in </span>
-              </n-button>
-            </nuxt-link>
+            <NuxtLink v-if="!loggedIn" to="/login">
+              <UButton label="Log in" size="lg" />
+            </NuxtLink>
 
-            <nuxt-link v-if="!loggedIn" to="/register">
-              <n-button color="black" size="large"> Get started </n-button>
-            </nuxt-link>
+            <NuxtLink v-if="!loggedIn" to="/register">
+              <UButton label="Get started" color="neutral" size="lg" />
+            </NuxtLink>
 
-            <nuxt-link v-if="loggedIn" to="/dashboard">
-              <n-button color="black" size="large"> Dashboard </n-button>
-            </nuxt-link>
+            <NuxtLink v-if="loggedIn" to="/dashboard">
+              <UButton label="Dashboard" color="neutral" size="lg" />
+            </NuxtLink>
 
-            <n-button @click="logout"> Logout </n-button>
+            <UButton label="Logout" color="neutral" size="lg" />
 
             <button
               data-collapse-toggle="mobile-menu-2"

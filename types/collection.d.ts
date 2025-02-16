@@ -5,7 +5,6 @@ interface CollectionGETAPIResponse {
   updated: string;
   description: string;
   detailedDescription: string;
-  identifier: string;
   imageUrl: string;
   private: boolean;
   type: string;

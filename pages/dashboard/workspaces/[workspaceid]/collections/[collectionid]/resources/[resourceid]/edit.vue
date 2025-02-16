@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { z } from "zod";
-import type { FormSubmitEvent } from "#ui/types";
+import type { FormSubmitEvent, FormError } from "#ui/types";
 
 import { faker } from "@faker-js/faker";
 
@@ -30,16 +29,61 @@ const createForm = useTemplateRef("createForm");
 
 const loading = ref(false);
 
-const schema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  identifier: z.string().min(1, "Identifier is required"),
-  identifierType: z.string().min(1, "Identifier type is required"),
-  resourceType: z.string().min(1, "Resource type is required"),
-  versionLabel: z.string().optional(),
-});
+const validateForm = (_state: any): FormError[] => {
+  const errrors = [];
 
-type Schema = z.output<typeof schema>;
+  if (!state.title) {
+    errrors.push({
+      name: "title",
+      message: "Title is required",
+    });
+  }
+
+  if (!state.description) {
+    errrors.push({
+      name: "description",
+      message: "Description is required",
+    });
+  }
+
+  if (!state.identifier) {
+    errrors.push({
+      name: "identifier",
+      message: "Identifier is required",
+    });
+  }
+
+  if (!state.identifierType) {
+    errrors.push({
+      name: "identifierType",
+      message: "Identifier type is required",
+    });
+  }
+
+  if (state.identifierType && state.identifier) {
+    // run the identifier regex against the identifier
+    const identifierRegex = new RegExp(
+      identifierTypeOptions.find((i) => i.value === state.identifierType)
+        ?.pattern || "",
+    );
+
+    if (!identifierRegex.test(state.identifier)) {
+      errrors.push({
+        name: "identifier",
+        message: "Identifier is not in the correct format",
+      });
+    }
+  }
+
+  if (!state.resourceType) {
+    errrors.push({
+      name: "resourceType",
+      message: "Resource type is required",
+    });
+  }
+
+  return errrors;
+};
 
 const state = reactive({
   title: faker.commerce.productName(),
@@ -122,7 +166,7 @@ const disableEditing = computed(() => {
   );
 });
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: FormSubmitEvent<any>) {
   const body = {
     title: event.data.title,
     description: event.data.description,
@@ -203,7 +247,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <div class="mx-auto w-full max-w-screen-xl px-2.5 py-10 lg:px-20">
       <UForm
         ref="createForm"
-        :schema="schema"
+        :validate="validateForm"
         :state="state"
         class="space-y-4"
         @submit="onSubmit"
@@ -246,7 +290,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UFormField label="Identifier" name="identifier">
           <UInput
             v-model="state.identifier"
-            placeholder="10.1234/abc"
+            :placeholder="
+              identifierTypeOptions.find(
+                (i) => i.value === state.identifierType,
+              )?.placeholder || ''
+            "
             clearable
             :disabled="
               !!(

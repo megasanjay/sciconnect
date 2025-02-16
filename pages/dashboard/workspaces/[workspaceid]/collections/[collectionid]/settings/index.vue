@@ -307,30 +307,28 @@ const updateThumbnail = async (evt: any) => {
           Click on the thumbnail to upload a custom one from your device.
         </p>
 
-        <n-spin :show="thumbnailLoading">
-          <div class="relative">
-            <label class="" for="single">
-              <UAvatar
-                :src="
-                  collectionImage ||
-                  'https://api.dicebear.com/6.x/shapes/svg?seed=collection'
-                "
-                size="xl"
-                alt="Collection Thumbnail"
-              />
-            </label>
-
-            <input
-              id="single"
-              style="position: absolute; visibility: hidden"
-              type="file"
-              accept="image/*"
-              class="absolute inset-0 hidden"
-              :disabled="thumbnailLoading"
-              @change="updateThumbnail"
+        <div class="relative">
+          <label class="" for="single">
+            <UAvatar
+              :src="
+                collectionImage ||
+                'https://api.dicebear.com/6.x/shapes/svg?seed=collection'
+              "
+              size="xl"
+              alt="Collection Thumbnail"
             />
-          </div>
-        </n-spin>
+          </label>
+
+          <input
+            id="single"
+            style="position: absolute; visibility: hidden"
+            type="file"
+            accept="image/*"
+            class="absolute inset-0 hidden"
+            :disabled="thumbnailLoading"
+            @change="updateThumbnail"
+          />
+        </div>
       </div>
 
       <template #action>

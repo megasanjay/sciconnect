@@ -93,7 +93,7 @@ const selectIcon = (type: string) => {
         v-if="collection?.version === null"
         class="rounded-lg border border-dashed px-4 py-8"
       >
-        <n-empty size="large" description="No resources found"> </n-empty>
+        No resources found
       </div>
 
       <div

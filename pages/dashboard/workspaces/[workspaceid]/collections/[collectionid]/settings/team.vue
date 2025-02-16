@@ -520,10 +520,9 @@ const inviteMember = async () => {
         class="flex items-center justify-between border border-slate-200 bg-white p-5"
       >
         <div class="flex items-center space-x-3">
-          <n-avatar
-            :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${member.id}`"
-            :size="50"
-            round
+          <UAvatar
+            :src="`https://api.dicebear.com/7.x/shapes/svg?seed=${member.id}`"
+            size="xl"
           />
 
           <div class="flex flex-col">

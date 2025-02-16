@@ -254,11 +254,8 @@ const publishCollection = async () => {
               Please fix the following issues before publishing the collection.
             </UAlert>
 
-            <n-list>
-              <n-list-item
-                v-for="error of validationResults.errors"
-                :key="error.id"
-              >
+            <ul>
+              <li v-for="error of validationResults.errors" :key="error.id">
                 <div>
                   <NuxtLink
                     :to="`/dashboard/workspaces/${workspaceid}/collections/${collectionid}/resources/${error.id}`"
@@ -283,8 +280,8 @@ const publishCollection = async () => {
                     </li>
                   </ul>
                 </div>
-              </n-list-item>
-            </n-list>
+              </li>
+            </ul>
           </div>
 
           <div v-else class="flex gap-2">

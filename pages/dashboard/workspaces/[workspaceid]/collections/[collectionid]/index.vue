@@ -48,7 +48,7 @@ if (error.value) {
             {{ collection?.title || "Untitled Collection" }}
           </h1>
 
-          <ULink :to="`/view/${collection?.identifier}`" target="__blank">
+          <ULink :to="`/view/c${collection?.id}`" target="__blank">
             <UButton size="lg" color="primary" icon="mdi:open-in-new">
               View in Catalog
             </UButton>
