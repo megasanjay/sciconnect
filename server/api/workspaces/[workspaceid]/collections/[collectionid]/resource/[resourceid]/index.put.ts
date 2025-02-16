@@ -21,8 +21,8 @@ export default defineEventHandler(async (event) => {
   // Check if the body is present
   if (!body) {
     throw createError({
-      message: "Missing required fields",
       statusCode: 400,
+      statusMessage: "Missing required fields",
     });
   }
 
@@ -33,8 +33,8 @@ export default defineEventHandler(async (event) => {
     console.log(parsedBody.error);
 
     throw createError({
-      message: "The provided parameters are invalid",
       statusCode: 400,
+      statusMessage: "The provided parameters are invalid",
     });
   }
 
@@ -54,13 +54,16 @@ export default defineEventHandler(async (event) => {
 
   if (!collection) {
     throw createError({
-      message: "Collection not found",
       statusCode: 404,
+      statusMessage: "Collection not found",
     });
   }
 
   // get the latest version of the collection
   const version = await prisma.version.findFirst({
+    include: {
+      Resource: true,
+    },
     where: { collectionId, published: false },
   });
 
@@ -72,15 +75,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Check if the resource exists
-  const resource = await prisma.resource.findUnique({
-    where: { id: resourceid },
-  });
+  // Check if the resource exists in the draft version
+  const resource = version.Resource.find((r) => r.id === resourceid);
 
   if (!resource) {
     throw createError({
-      message: "Resource not found",
       statusCode: 404,
+      statusMessage: "Resource not found",
     });
   }
 
@@ -102,7 +103,6 @@ export default defineEventHandler(async (event) => {
       title,
       action: resource.action || "update",
       description,
-
       identifier,
       identifierType,
       resourceType,
@@ -115,15 +115,15 @@ export default defineEventHandler(async (event) => {
 
   if (!updatedResource) {
     throw createError({
-      message: "Something went wrong",
       statusCode: 404,
+      statusMessage: "Something went wrong",
     });
   }
 
   await touchCollection(collectionId);
 
   return {
-    message: "Resource updated",
     statusCode: 200,
+    statusMessage: "Resource updated",
   };
 });

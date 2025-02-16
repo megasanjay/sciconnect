@@ -105,8 +105,7 @@ const identifierTypeOptions = PREFIX_JSON;
 resourceTypeOptions.sort((a, b) => a.label.localeCompare(b.label));
 
 const { data: resource, error } = await useFetch(
-  `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
-  {},
+  `/api/workspaces/${workspaceid}/collections/${collectionid}/resource/${resourceid}`,
 );
 
 if (error.value) {
@@ -165,21 +164,21 @@ const disableEditing = computed(() => {
 });
 
 async function onSubmit(event: FormSubmitEvent<any>) {
-  const body = {
-    title: event.data.title,
-    description: event.data.description,
-    identifier: event.data.identifier,
-    identifierType: event.data.identifierType,
-    resourceType: event.data.resourceType,
-    versionLabel: event.data.versionLabel,
+  const b = {
+    title: event.data.title || "",
+    description: event.data.description || "",
+    identifier: event.data.identifier || "",
+    identifierType: event.data.identifierType || "",
+    resourceType: event.data.resourceType || "",
+    versionLabel: event.data.versionLabel || "",
   };
 
   loading.value = true;
 
   await $fetch(
-    `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
+    `/api/workspaces/${workspaceid}/collections/${collectionid}/resource/${resourceid}`,
     {
-      body: JSON.stringify(body),
+      body: JSON.stringify(b),
       method: "PUT",
     },
   )

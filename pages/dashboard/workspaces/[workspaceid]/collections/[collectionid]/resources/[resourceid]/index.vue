@@ -22,8 +22,7 @@ const { collectionid, resourceid, workspaceid } = route.params as {
 };
 
 const { data: resource, error } = await useFetch(
-  `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
-  {},
+  `/api/workspaces/${workspaceid}/collections/${collectionid}/resource/${resourceid}`,
 );
 
 if (error.value) {
@@ -98,7 +97,7 @@ const removeResource = async () => {
   removeResourceLoadingIndicator.value = true;
 
   await $fetch(
-    `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}`,
+    `/api/workspaces/${workspaceid}/collections/${collectionid}/resource/${resourceid}`,
     {
       method: "DELETE",
     },
@@ -141,10 +140,9 @@ const createNewVersion = async () => {
   newResourceVersionLoadingIndicator.value = true;
 
   await $fetch(
-    `/api/workspaces/${workspaceid}/collections/${collectionid}/resources/${resourceid}/new-version`,
+    `/api/workspaces/${workspaceid}/collections/${collectionid}/resource/${resourceid}/new-version`,
     {
       body: JSON.stringify(body),
-
       method: "POST",
     },
   )

@@ -169,18 +169,6 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  /**
-   * Delete the updated resources after the relations have been mapped
-   */
-  for (const updatedResource of updatedResources) {
-    // delete the updated staging resource
-    await prisma.resource.delete({
-      where: {
-        id: updatedResource.id,
-      },
-    });
-  }
-
   // Remove all deleted external relations
   const externalRelations = draftVersion.ExternalRelation;
 
